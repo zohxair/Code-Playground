@@ -1,0 +1,2638 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>9618 Code Playground</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Write and run Cambridge 9618 pseudocode and Python in the browser, with step-by-step execution and trace tables.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* CodeMirror 5.65.16 base styles (MIT) */
+.CodeMirror {
+  font-family: monospace;
+  height: 300px;
+  color: black;
+  direction: ltr;
+}
+.CodeMirror-lines {
+  padding: 4px 0;
+}
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+  padding: 0 4px;
+}
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  background-color: white;
+}
+.CodeMirror-gutters {
+  border-right: 1px solid #ddd;
+  background-color: #f7f7f7;
+  white-space: nowrap;
+}
+.CodeMirror-linenumbers {}
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #999;
+  white-space: nowrap;
+}
+.CodeMirror-guttermarker { color: black; }
+.CodeMirror-guttermarker-subtle { color: #999; }
+.CodeMirror-cursor {
+  border-left: 1px solid black;
+  border-right: none;
+  width: 0;
+}
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver;
+}
+.cm-fat-cursor .CodeMirror-cursor {
+  width: auto;
+  border: 0 !important;
+  background: #7e7;
+}
+.cm-fat-cursor div.CodeMirror-cursors {
+  z-index: 1;
+}
+.cm-fat-cursor .CodeMirror-line::selection,
+.cm-fat-cursor .CodeMirror-line > span::selection,
+.cm-fat-cursor .CodeMirror-line > span > span::selection { background: transparent; }
+.cm-fat-cursor .CodeMirror-line::-moz-selection,
+.cm-fat-cursor .CodeMirror-line > span::-moz-selection,
+.cm-fat-cursor .CodeMirror-line > span > span::-moz-selection { background: transparent; }
+.cm-fat-cursor { caret-color: transparent; }
+@-moz-keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+@-webkit-keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+@keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+.CodeMirror-overwrite .CodeMirror-cursor {}
+.cm-tab { display: inline-block; text-decoration: inherit; }
+.CodeMirror-rulers {
+  position: absolute;
+  left: 0; right: 0; top: -50px; bottom: 0;
+  overflow: hidden;
+}
+.CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  top: 0; bottom: 0;
+  position: absolute;
+}
+.cm-negative {color: #d44;}
+.cm-positive {color: #292;}
+.cm-header, .cm-strong {font-weight: bold;}
+.cm-em {font-style: italic;}
+.cm-link {text-decoration: underline;}
+.cm-strikethrough {text-decoration: line-through;}
+.cm-invalidchar {color: #f00;}
+.CodeMirror-composing { border-bottom: 2px solid; }
+div.CodeMirror span.CodeMirror-matchingbracket {color: #0b0;}
+div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #a22;}
+.CodeMirror-matchingtag { background: rgba(255, 150, 0, .3); }
+.CodeMirror-activeline-background {background: #e8f2ff;}
+.CodeMirror {
+  position: relative;
+  overflow: hidden;
+  background: white;
+}
+.CodeMirror-scroll {
+  overflow: scroll !important;
+  margin-bottom: -50px; margin-right: -50px;
+  padding-bottom: 50px;
+  height: 100%;
+  outline: none;
+  position: relative;
+  z-index: 0;
+}
+.CodeMirror-sizer {
+  position: relative;
+  border-right: 50px solid transparent;
+}
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  position: absolute;
+  z-index: 6;
+  display: none;
+  outline: none;
+}
+.CodeMirror-vscrollbar {
+  right: 0; top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.CodeMirror-hscrollbar {
+  bottom: 0; left: 0;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+.CodeMirror-scrollbar-filler {
+  right: 0; bottom: 0;
+}
+.CodeMirror-gutter-filler {
+  left: 0; bottom: 0;
+}
+.CodeMirror-gutters {
+  position: absolute; left: 0; top: 0;
+  min-height: 100%;
+  z-index: 3;
+}
+.CodeMirror-gutter {
+  white-space: normal;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: -50px;
+}
+.CodeMirror-gutter-wrapper {
+  position: absolute;
+  z-index: 4;
+  background: none !important;
+  border: none !important;
+}
+.CodeMirror-gutter-background {
+  position: absolute;
+  top: 0; bottom: 0;
+  z-index: 4;
+}
+.CodeMirror-gutter-elt {
+  position: absolute;
+  cursor: default;
+  z-index: 4;
+}
+.CodeMirror-gutter-wrapper ::selection { background-color: transparent }
+.CodeMirror-gutter-wrapper ::-moz-selection { background-color: transparent }
+.CodeMirror-lines {
+  cursor: text;
+  min-height: 1px;
+}
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+  -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
+  border-width: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: inherit;
+  color: inherit;
+  z-index: 2;
+  position: relative;
+  overflow: visible;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-variant-ligatures: contextual;
+  font-variant-ligatures: contextual;
+}
+.CodeMirror-wrap pre.CodeMirror-line,
+.CodeMirror-wrap pre.CodeMirror-line-like {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: normal;
+}
+.CodeMirror-linebackground {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  z-index: 0;
+}
+.CodeMirror-linewidget {
+  position: relative;
+  z-index: 2;
+  padding: 0.1px;
+}
+.CodeMirror-widget {}
+.CodeMirror-rtl pre { direction: rtl; }
+.CodeMirror-code {
+  outline: none;
+}
+.CodeMirror-scroll,
+.CodeMirror-sizer,
+.CodeMirror-gutter,
+.CodeMirror-gutters,
+.CodeMirror-linenumber {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+.CodeMirror-measure {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+.CodeMirror-cursor {
+  position: absolute;
+  pointer-events: none;
+}
+.CodeMirror-measure pre { position: static; }
+div.CodeMirror-cursors {
+  visibility: hidden;
+  position: relative;
+  z-index: 3;
+}
+div.CodeMirror-dragcursors {
+  visibility: visible;
+}
+.CodeMirror-focused div.CodeMirror-cursors {
+  visibility: visible;
+}
+.CodeMirror-selected { background: #d9d9d9; }
+.CodeMirror-focused .CodeMirror-selected { background: #d7d4f0; }
+.CodeMirror-crosshair { cursor: crosshair; }
+.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: #d7d4f0; }
+.CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d7d4f0; }
+.cm-searching {
+  background-color: #ffa;
+  background-color: rgba(255, 255, 0, .4);
+}
+.cm-force-border { padding-right: .1px; }
+@media print {
+  .CodeMirror div.CodeMirror-cursors {
+    visibility: hidden;
+  }
+}
+.cm-tab-wrap-hack:after { content: ''; }
+span.CodeMirror-selectedtext { background: none; }
+</style>
+<style>
+/* Layout: a two-pane workbench, code on the left and the program's console, trace table and variables on the right. */
+:root{
+  --bg:#EDF1F4; --surface:#FFFFFF; --surface-2:#F4F7F9; --ink:#14202A; --muted:#536271; --rule:#D3DBE2; --rule-strong:#AEBBC6;
+  --ps:#0A7570; --ps-soft:#E1F1EF; --py:#3344B3; --py-soft:#E6E9FA;
+  --accent:var(--ps); --accent-soft:var(--ps-soft);
+  --err:#B42318; --err-soft:#FDECEA; --warn:#8A5A00; --warn-soft:#FFF4DC; --ok:#1B7A44;
+  --cur:#FFF1B8; --cur-gutter:#E8B900;
+  --kw:#2F3FA8; --str:#9A4A00; --num:#0A6B4B; --com:#6E7C88; --fn:#8A2F8F; --op:#0A7570;
+  --font:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --r:12px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151B; --surface:#151F28; --surface-2:#1A2630; --ink:#E1E8ED; --muted:#93A3B0; --rule:#283745; --rule-strong:#3B4D5D;
+    --ps:#3FC2B6; --ps-soft:#14302F; --py:#97A3FF; --py-soft:#1F2547;
+    --err:#FF8A7E; --err-soft:#3B1714; --warn:#F2C14E; --warn-soft:#352A10; --ok:#63D894;
+    --cur:#3A3410; --cur-gutter:#E8B900;
+    --kw:#9AA6FF; --str:#F0B072; --num:#6FD6A8; --com:#7D8D9A; --fn:#E39BEA; --op:#3FC2B6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --surface:#151F28; --surface-2:#1A2630; --ink:#E1E8ED; --muted:#93A3B0; --rule:#283745; --rule-strong:#3B4D5D;
+  --ps:#3FC2B6; --ps-soft:#14302F; --py:#97A3FF; --py-soft:#1F2547;
+  --err:#FF8A7E; --err-soft:#3B1714; --warn:#F2C14E; --warn-soft:#352A10; --ok:#63D894;
+  --cur:#3A3410; --cur-gutter:#E8B900;
+  --kw:#9AA6FF; --str:#F0B072; --num:#6FD6A8; --com:#7D8D9A; --fn:#E39BEA; --op:#3FC2B6;
+  color-scheme:dark;
+}
+:root[data-lang="py"]{ --accent:var(--py); --accent-soft:var(--py-soft); }
+
+*{ box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html, body{ height:100%; }
+body{ margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 var(--font); font-variant-ligatures:none; display:flex; flex-direction:column; height:100vh; height:100dvh; }
+body::before{ content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:60; background:var(--surface); }
+button, input, select, textarea{ font:inherit; color:inherit; }
+:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:4px; }
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* Header and toolbar */
+.top{ flex:none; position:sticky; top:env(safe-area-inset-top, 0px); z-index:30; background:var(--surface); border-bottom:1px solid var(--rule); }
+.top-in{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding-block:10px; padding-left:max(20px, env(safe-area-inset-left, 0px)); padding-right:max(20px, env(safe-area-inset-right, 0px)); }
+.brand{ display:flex; align-items:baseline; gap:8px; white-space:nowrap; margin-right:6px; }
+.brand b{ font-size:22px; letter-spacing:-0.02em; }
+.brand span{ font-size:15px; color:var(--muted); }
+.switch{ display:flex; background:var(--surface-2); border:1px solid var(--rule); border-radius:999px; padding:3px; }
+.switch button{ border:0; background:transparent; padding:5px 14px; border-radius:999px; cursor:pointer; font-weight:700; font-size:14.5px; color:var(--muted); }
+.switch button[aria-selected="true"][data-lang="ps"]{ background:var(--ps); color:var(--surface); }
+.switch button[aria-selected="true"][data-lang="py"]{ background:var(--py); color:var(--surface); }
+.tools{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-left:auto; }
+.btn{ display:inline-flex; align-items:center; gap:7px; border:1px solid var(--rule-strong); background:var(--surface-2); border-radius:9px; padding:7px 13px; cursor:pointer; font-weight:700; font-size:14.5px; line-height:1.2; white-space:nowrap; }
+.btn:hover:not(:disabled){ border-color:var(--accent); }
+.btn:disabled{ opacity:.45; cursor:default; }
+.btn.run{ background:var(--accent); border-color:var(--accent); color:var(--surface); }
+.btn.stop{ color:var(--err); }
+.btn kbd{ font:600 11px var(--mono); opacity:.75; }
+.sel{ border:1px solid var(--rule-strong); background:var(--surface-2); border-radius:9px; padding:7px 10px; font-size:14.5px; max-width:230px; }
+.icon-btn{ border:1px solid var(--rule); background:var(--surface-2); width:36px; height:36px; border-radius:9px; display:grid; place-items:center; cursor:pointer; flex:none; }
+
+/* Workbench */
+.bench{ display:grid; grid-template-columns:minmax(0, 1.12fr) minmax(0, 0.88fr); gap:14px; padding-block:14px 18px; padding-left:max(20px, env(safe-area-inset-left, 0px)); padding-right:max(20px, env(safe-area-inset-right, 0px)); flex:1 0 auto; height:0; min-height:520px; }
+.card{ background:var(--surface); border:1px solid var(--rule); border-radius:var(--r); display:flex; flex-direction:column; min-height:0; min-width:0; overflow:hidden; }
+.card-h{ display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--rule); background:var(--surface-2); font-size:14px; min-height:42px; }
+.card-h .ttl{ font-weight:700; }
+.card-h .file{ font-family:var(--mono); font-size:13px; color:var(--muted); }
+.card-h .sp{ margin-left:auto; }
+.mini{ border:1px solid var(--rule); background:var(--surface); border-radius:7px; padding:3px 9px; cursor:pointer; font-size:13px; font-weight:600; }
+.left{ display:flex; flex-direction:column; gap:0; min-height:0; }
+.editor-wrap{ flex:1; min-height:0; position:relative; }
+.editor-wrap .CodeMirror{ position:absolute; inset:0; height:100%; }
+.editor-wrap textarea.fallback{ position:absolute; inset:0; width:100%; height:100%; border:0; padding:12px; font:14.5px/1.6 var(--mono); background:var(--surface); color:var(--ink); resize:none; }
+.statusbar{ display:flex; gap:14px; align-items:center; padding:7px 12px; border-top:1px solid var(--rule); font-size:13.5px; color:var(--muted); background:var(--surface-2); flex-wrap:wrap; }
+.pill{ display:inline-flex; align-items:center; gap:6px; font-weight:700; color:var(--ink); }
+.pill::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--rule-strong); }
+.pill[data-s="run"]::before{ background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+.pill[data-s="pause"]::before, .pill[data-s="input"]::before{ background:var(--cur-gutter); }
+.pill[data-s="done"]::before{ background:var(--ok); }
+.pill[data-s="err"]::before{ background:var(--err); }
+.right{ display:grid; grid-template-rows:minmax(160px, 0.9fr) minmax(200px, 1.1fr); gap:14px; min-height:0; }
+
+/* Console */
+.console{ flex:1; overflow:auto; padding:10px 14px; font:14px/1.55 var(--mono); white-space:pre-wrap; word-break:break-word; }
+.console .o{ display:block; }
+.console .in{ color:var(--accent); }
+.console .sys{ color:var(--muted); font-family:var(--font); font-size:13.5px; }
+.console .warn{ display:block; color:var(--warn); background:var(--warn-soft); border-radius:6px; padding:4px 8px; margin:4px 0; font-family:var(--font); font-size:13.5px; }
+.console .error{ display:block; color:var(--err); background:var(--err-soft); border-radius:8px; padding:8px 10px; margin:6px 0; font-family:var(--font); font-size:14px; white-space:normal; }
+.console .error b{ display:block; }
+.console .error .hint{ display:block; color:var(--ink); margin-top:4px; }
+.console .empty{ color:var(--muted); font-family:var(--font); font-size:14px; }
+.inrow{ display:none; gap:8px; padding:8px 10px; border-top:1px solid var(--rule); background:var(--accent-soft); align-items:center; flex-wrap:wrap; }
+.inrow.on{ display:flex; }
+.inrow label{ font-size:13.5px; font-weight:700; color:var(--accent); }
+.inrow input{ flex:1; min-width:120px; border:1.5px solid var(--accent); background:var(--surface); border-radius:8px; padding:6px 10px; font:14px var(--mono); }
+
+/* Panels */
+.tabs{ display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; }
+.tabs button{ white-space:nowrap; border:0; background:transparent; padding:6px 11px; border-radius:7px; cursor:pointer; font-weight:700; font-size:13.5px; color:var(--muted); }
+.tabs button[aria-selected="true"]{ background:var(--surface); color:var(--ink); box-shadow:0 0 0 1px var(--rule); }
+.panel{ flex:1; overflow:auto; min-height:0; }
+.panel[hidden]{ display:none; }
+table.tt{ border-collapse:collapse; font:13px var(--mono); min-width:100%; }
+.tt th, .tt td{ border-bottom:1px solid var(--rule); border-right:1px solid var(--rule); padding:5px 9px; text-align:center; white-space:nowrap; }
+.tt thead th{ position:sticky; top:0; background:var(--surface-2); font-weight:600; z-index:1; }
+.tt td.out{ text-align:left; color:var(--accent); }
+.tt td.new{ background:var(--accent-soft); font-weight:600; }
+.tt th:first-child, .tt td:first-child{ color:var(--muted); }
+.vars td, .vars th{ text-align:left; }
+.vars td.v{ white-space:pre-wrap; word-break:break-word; max-width:320px; }
+.vars td.t{ color:var(--muted); font-family:var(--font); font-size:12.5px; }
+.note{ padding:12px 14px; color:var(--muted); font-size:14px; }
+.files{ padding:10px 12px; display:flex; flex-direction:column; gap:12px; }
+.fileitem{ border:1px solid var(--rule); border-radius:10px; overflow:hidden; }
+.fileitem header{ display:flex; gap:8px; align-items:center; padding:6px 10px; background:var(--surface-2); font:600 13px var(--mono); }
+.fileitem header .sp{ margin-left:auto; }
+.fileitem textarea{ width:100%; border:0; min-height:90px; padding:8px 10px; font:13px/1.55 var(--mono); background:var(--surface); color:var(--ink); resize:vertical; display:block; }
+.newfile{ display:flex; gap:8px; }
+.newfile input{ flex:1; min-width:0; border:1px solid var(--rule-strong); border-radius:8px; padding:6px 10px; font:13px var(--mono); background:var(--surface-2); }
+.ref{ padding:12px 16px 20px; font-size:14px; }
+.ref h3{ font-size:15px; margin:14px 0 6px; }
+.ref h3:first-child{ margin-top:2px; }
+.ref pre{ background:var(--surface-2); border:1px solid var(--rule); border-radius:8px; padding:8px 10px; font:12.5px/1.55 var(--mono); overflow-x:auto; margin:4px 0 8px; }
+.ref p{ margin:4px 0 8px; max-width:62ch; }
+.ref code{ font:12.5px var(--mono); background:var(--surface-2); border:1px solid var(--rule); border-radius:4px; padding:0 4px; }
+
+/* CodeMirror theme */
+.CodeMirror{ font:14.5px/1.65 var(--mono); background:var(--surface); color:var(--ink); }
+.CodeMirror-gutters{ background:var(--surface-2); border-right:1px solid var(--rule); }
+.CodeMirror-linenumber{ color:var(--muted); padding:0 8px 0 4px; }
+.CodeMirror-cursor{ border-left:2px solid var(--ink); }
+.CodeMirror-selected, .CodeMirror-focused .CodeMirror-selected{ background:var(--accent-soft) !important; }
+.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection{ background:var(--accent-soft); }
+.cm-keyword{ color:var(--kw); font-weight:600; }
+.cm-builtin{ color:var(--fn); }
+.cm-string, .cm-string-2{ color:var(--str); }
+.cm-number{ color:var(--num); }
+.cm-comment{ color:var(--com); font-style:italic; }
+.cm-operator.cm-arrow{ color:var(--op); font-weight:600; }
+.cm-def{ color:var(--fn); font-weight:600; }
+.cm-variable-2, .cm-variable-3, .cm-type{ color:var(--num); }
+.cm-atom{ color:var(--kw); }
+.cm-cur-line{ background:var(--cur); }
+.cm-cur-gutter{ background:var(--cur-gutter); }
+.cm-cur-gutter .CodeMirror-linenumber{ color:#14202A; font-weight:700; }
+.cm-err-line{ background:var(--err-soft); }
+.cm-err-gutter{ background:var(--err); }
+.cm-err-gutter .CodeMirror-linenumber{ color:#fff; font-weight:700; }
+
+/* Responsive */
+@media (max-width: 1400px){ .btn kbd{ display:none; } }
+@media (max-width: 980px){
+  body{ height:auto; display:block; }
+  .bench{ grid-template-columns:1fr; height:auto; }
+  .left{ height:62vh; min-height:360px; }
+  .right{ grid-template-rows:auto auto; }
+  .right .card:first-child{ height:260px; }
+  .right .card:last-child{ height:420px; }
+  .tools{ margin-left:0; width:100%; }
+}
+@media (max-width: 560px){
+  .top-in{ gap:8px; }
+  .brand b{ font-size:19px; }
+  .brand span{ font-size:14px; }
+  #themeBtn{ order:1; margin-left:auto; }
+  .switch{ order:2; }
+  .tools{ order:3; }
+  #examples{ max-width:none; flex:1 1 52%; min-width:0; order:-2; }
+  #speed{ max-width:none; flex:none; order:-1; }
+  .btn{ padding:7px 11px; }
+  .tabs button{ padding:6px 8px; }
+  .card-h{ padding:8px 10px; }
+}
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><b>9618</b><span>Code Playground</span></div>
+    <div class="switch" role="tablist" aria-label="Language">
+      <button role="tab" data-lang="ps" aria-selected="true" id="tab-ps">Pseudocode</button>
+      <button role="tab" data-lang="py" aria-selected="false" id="tab-py">Python</button>
+    </div>
+    <div class="tools">
+      <label class="sr-only" for="examples">Load an example</label>
+      <select class="sel" id="examples"></select>
+      <button class="btn run" id="runBtn" type="button" title="Run (Ctrl+Enter)"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg>Run <kbd>Ctrl ↵</kbd></button>
+      <button class="btn" id="stepBtn" type="button" title="Run one line at a time (F8)"><svg width="14" height="12" viewBox="0 0 14 12" aria-hidden="true"><path d="M1 1l7 5-7 5z" fill="currentColor"/><rect x="10" y="1" width="2.5" height="10" fill="currentColor"/></svg>Step <kbd>F8</kbd></button>
+      <button class="btn stop" id="stopBtn" type="button" disabled><svg width="11" height="11" viewBox="0 0 11 11" aria-hidden="true"><rect width="11" height="11" rx="2" fill="currentColor"/></svg>Stop</button>
+      <label class="sr-only" for="speed">Run speed</label>
+      <select class="sel" id="speed" title="Instant runs at full speed. Fast and slow highlight each line as it runs.">
+        <option value="0">Speed: instant</option>
+        <option value="120">Speed: fast</option>
+        <option value="500">Speed: slow</option>
+      </select>
+      <button class="btn" id="arrowBtn" type="button" title="Insert the assignment arrow (you can also type <-)">←</button>
+    </div>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 2a7 7 0 0 1 0 14z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main class="bench">
+  <section class="card left" aria-label="Code editor">
+    <div class="card-h"><span class="ttl">Code</span><span class="file" id="fileName">main.pseudo</span><span class="sp"></span><button class="mini" id="resetBtn" type="button">Reset example</button></div>
+    <div class="editor-wrap" id="editorWrap"></div>
+    <div class="statusbar"><span class="pill" id="status" data-s="ready">Ready</span><span id="statusMore">Press Run, or Step to go one line at a time.</span></div>
+  </section>
+  <div class="right">
+    <section class="card" aria-label="Console">
+      <div class="card-h"><span class="ttl">Console</span><span class="sp"></span><button class="mini" id="clearBtn" type="button">Clear</button></div>
+      <div class="console" id="console" aria-live="polite"></div>
+      <form class="inrow" id="inrow" autocomplete="off">
+        <label for="inval" id="inlabel">INPUT</label>
+        <input id="inval" type="text" spellcheck="false">
+        <button class="btn run" type="submit">Enter</button>
+      </form>
+    </section>
+    <section class="card" aria-label="Trace table and variables">
+      <div class="card-h">
+        <div class="tabs" role="tablist" aria-label="Panels">
+          <button role="tab" data-p="trace" aria-selected="true">Trace table</button>
+          <button role="tab" data-p="vars" aria-selected="false">Variables</button>
+          <button role="tab" data-p="files" aria-selected="false" id="filesTab">Files</button>
+          <button role="tab" data-p="ref" aria-selected="false">Reference</button>
+        </div>
+      </div>
+      <div class="panel" data-p="trace" id="tracePanel"></div>
+      <div class="panel" data-p="vars" id="varsPanel" hidden></div>
+      <div class="panel" data-p="files" id="filesPanel" hidden></div>
+      <div class="panel" data-p="ref" id="refPanel" hidden></div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.js"></script>
+<script>
+/* Cambridge 9618 pseudocode interpreter.
+   compile(source) -> program (throws PseudoError)
+   new Machine(program, io).run() -> Promise; io = { output(text), input(label) -> Promise<string>,
+   tick(line, machine) -> Promise|undefined, onEvent(evt), files: Map<string,string[]> } */
+(function (root) {
+"use strict";
+
+class PseudoError extends Error {
+  constructor(line, message, hint) { super(message); this.line = line; this.hint = hint || ""; }
+}
+class StopSignal extends Error { constructor() { super("Stopped"); } }
+class ReturnSignal { constructor(value) { this.value = value; } }
+
+const KEYWORDS = new Set(("DECLARE CONSTANT ARRAY OF INTEGER REAL CHAR STRING BOOLEAN DATE TYPE ENDTYPE IF THEN ELSE ENDIF " +
+  "CASE OTHERWISE ENDCASE FOR TO STEP NEXT WHILE DO ENDWHILE REPEAT UNTIL PROCEDURE ENDPROCEDURE FUNCTION RETURNS RETURN " +
+  "ENDFUNCTION CALL BYREF BYVAL INPUT OUTPUT OPENFILE READFILE WRITEFILE CLOSEFILE READ WRITE APPEND RANDOM AND OR NOT MOD DIV TRUE FALSE").split(" "));
+const BASE_TYPES = new Set(["INTEGER", "REAL", "CHAR", "STRING", "BOOLEAN", "DATE"]);
+const BUILTINS = new Set(["LENGTH", "LEFT", "RIGHT", "MID", "SUBSTRING", "TO_UPPER", "TO_LOWER", "UCASE", "LCASE", "NUM_TO_STR", "STR_TO_NUM",
+  "IS_NUM", "ASC", "CHR", "INT", "RAND", "ROUND", "MOD", "DIV", "EOF"]);
+const UNSET = Symbol("unset");
+
+/* ---------------- Lexer ---------------- */
+function lex(src) {
+  const toks = []; let line = 1, i = 0;
+  const push = (t, v, extra) => toks.push(Object.assign({ t, v, line }, extra || {}));
+  src = src.replace(/\r\n?/g, "\n").replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+  while (i < src.length) {
+    const c = src[i];
+    if (c === "\n") { if (toks.length && toks[toks.length - 1].t !== "nl") push("nl"); line++; i++; continue; }
+    if (c === " " || c === "\t") { i++; continue; }
+    if (c === "/" && src[i + 1] === "/") { while (i < src.length && src[i] !== "\n") i++; continue; }
+    if (/[0-9]/.test(c)) {
+      let j = i; while (/[0-9]/.test(src[j])) j++;
+      let real = false;
+      if (src[j] === "." && /[0-9]/.test(src[j + 1])) { real = true; j++; while (/[0-9]/.test(src[j])) j++; }
+      push("num", Number(src.slice(i, j)), { real }); i = j; continue;
+    }
+    if (c === '"') {
+      let j = i + 1; while (j < src.length && src[j] !== '"' && src[j] !== "\n") j++;
+      if (src[j] !== '"') throw new PseudoError(line, "This string has no closing double quote \".");
+      push("str", src.slice(i + 1, j)); i = j + 1; continue;
+    }
+    if (c === "'") {
+      let j = i + 1; while (j < src.length && src[j] !== "'" && src[j] !== "\n") j++;
+      if (src[j] !== "'") throw new PseudoError(line, "This character has no closing single quote '.");
+      const s = src.slice(i + 1, j);
+      if (s.length !== 1) throw new PseudoError(line, `'${s}' is not a single character.`, "Single quotes are for one CHAR, such as 'A'. Use double quotes for a STRING, such as \"" + s + "\".");
+      push("chr", s); i = j + 1; continue;
+    }
+    if (/[A-Za-z_]/.test(c)) {
+      let j = i; while (j < src.length && /[A-Za-z0-9_]/.test(src[j])) j++;
+      const w = src.slice(i, j);
+      if (KEYWORDS.has(w)) push("kw", w); else push("id", w);
+      i = j; continue;
+    }
+    const two = src.slice(i, i + 2);
+    if (two === "<-") { push("op", "←"); i += 2; continue; }
+    if (["<=", ">=", "<>"].includes(two)) { push("op", two); i += 2; continue; }
+    if (c === "≤") { push("op", "<="); i++; continue; }
+    if (c === "≥") { push("op", ">="); i++; continue; }
+    if (c === "≠") { push("op", "<>"); i++; continue; }
+    if ("←=<>+-*/^&()[],:.".includes(c)) { push("op", c); i++; continue; }
+    throw new PseudoError(line, `I don't recognise the character "${c}".`);
+  }
+  if (toks.length && toks[toks.length - 1].t !== "nl") push("nl");
+  push("eof");
+  return toks;
+}
+
+/* ---------------- Parser ---------------- */
+function compile(src) {
+  const toks = lex(src);
+  let p = 0;
+  const peek = (o = 0) => toks[p + o];
+  const next = () => toks[p++];
+  const isKw = (w, o = 0) => peek(o).t === "kw" && peek(o).v === w;
+  const isOp = (v, o = 0) => peek(o).t === "op" && peek(o).v === v;
+  const lineOf = () => peek().line;
+  function describe(t) {
+    if (t.t === "nl") return "the end of the line";
+    if (t.t === "eof") return "the end of the program";
+    if (t.t === "str") return `"${t.v}"`;
+    if (t.t === "chr") return `'${t.v}'`;
+    return `"${t.v}"`;
+  }
+  function expectKw(w, msg, hint) {
+    if (isKw(w)) return next();
+    const t = peek();
+    if (t.t === "id" && t.v.toUpperCase() === w) throw new PseudoError(t.line, `Keywords must be in capitals: write ${w}, not ${t.v}.`);
+    throw new PseudoError(t.line, msg || `Expected ${w} but found ${describe(t)}.`, hint);
+  }
+  function expectOp(v, msg, hint) {
+    if (isOp(v)) return next();
+    throw new PseudoError(peek().line, msg || `Expected "${v}" but found ${describe(peek())}.`, hint);
+  }
+  function expectId(what) {
+    const t = peek();
+    if (t.t === "id") return next().v;
+    if (t.t === "kw") throw new PseudoError(t.line, `${t.v} is a keyword, so it can't be used as ${what}.`);
+    throw new PseudoError(t.line, `Expected ${what} but found ${describe(t)}.`);
+  }
+  function endLine() {
+    if (peek().t === "nl") { next(); return; }
+    if (peek().t === "eof") return;
+    const t = peek();
+    let hint = "";
+    if (t.t === "op" && t.v === "=") hint = "Use ← (or type <-) for assignment. = is only for comparing values.";
+    throw new PseudoError(t.line, `Unexpected ${describe(t)} here.`, hint);
+  }
+  function skipNl() { while (peek().t === "nl") next(); }
+
+  /* types */
+  function parseType() {
+    const t = peek();
+    if (t.t === "kw" && BASE_TYPES.has(t.v)) { next(); return { base: t.v }; }
+    if (isKw("ARRAY")) {
+      next(); expectOp("[", "Expected [ after ARRAY, as in ARRAY[1:10] OF INTEGER.");
+      const bounds = [];
+      do { const lo = parseExpr(); expectOp(":", "Array bounds are written lower:upper, as in [1:10]."); const hi = parseExpr(); bounds.push([lo, hi]); } while (isOp(",") && next());
+      expectOp("]"); expectKw("OF", "Expected OF after the array bounds, as in ARRAY[1:10] OF INTEGER.");
+      const elem = parseType();
+      if (elem.array) throw new PseudoError(t.line, "Use ARRAY[1:3, 1:4] for a 2D array, not an array of arrays.");
+      return { array: true, bounds, elem };
+    }
+    if (t.t === "id") { next(); return { user: t.v }; }
+    if (t.t === "id" || (t.t === "kw")) throw new PseudoError(t.line, `${t.v} is not a data type.`);
+    throw new PseudoError(t.line, `Expected a data type (INTEGER, REAL, CHAR, STRING, BOOLEAN, ARRAY…) but found ${describe(t)}.`);
+  }
+
+  /* expressions */
+  function parseExpr() { return parseOr(); }
+  function bin(op, l, r, line) { return { k: "bin", op, l, r, line }; }
+  function parseOr() { let l = parseAnd(); while (isKw("OR")) { const line = next().line; l = bin("OR", l, parseAnd(), line); } return l; }
+  function parseAnd() { let l = parseNot(); while (isKw("AND")) { const line = next().line; l = bin("AND", l, parseNot(), line); } return l; }
+  function parseNot() { if (isKw("NOT")) { const line = next().line; return { k: "un", op: "NOT", e: parseNot(), line }; } return parseCmp(); }
+  function parseCmp() {
+    let l = parseConcat();
+    if (peek().t === "op" && ["=", "<>", "<", ">", "<=", ">="].includes(peek().v)) { const t = next(); l = bin(t.v, l, parseConcat(), t.line); }
+    if (peek().t === "op" && ["=", "<>", "<", ">", "<=", ">="].includes(peek().v)) throw new PseudoError(peek().line, "Comparisons can't be chained like a < b < c.", "Write (a < b) AND (b < c).");
+    return l;
+  }
+  function parseConcat() { let l = parseAdd(); while (isOp("&")) { const line = next().line; l = bin("&", l, parseAdd(), line); } return l; }
+  function parseAdd() { let l = parseMul(); while (isOp("+") || isOp("-")) { const t = next(); l = bin(t.v, l, parseMul(), t.line); } return l; }
+  function parseMul() {
+    let l = parsePow();
+    while (isOp("*") || isOp("/") || (isKw("DIV") && !isOp("(", 1)) || (isKw("MOD") && !isOp("(", 1))) { const t = next(); l = bin(t.v, l, parsePow(), t.line); }
+    return l;
+  }
+  function parsePow() { const l = parseUnary(); if (isOp("^")) { const line = next().line; return bin("^", l, parsePow(), line); } return l; }
+  function parseUnary() {
+    if (isOp("-")) { const line = next().line; return { k: "un", op: "-", e: parseUnary(), line }; }
+    if (isOp("+")) { next(); return parseUnary(); }
+    return parsePostfix(parsePrimary());
+  }
+  function parseArgs() {
+    const args = []; expectOp("(");
+    if (!isOp(")")) { do { args.push(parseExpr()); } while (isOp(",") && next()); }
+    expectOp(")", "Expected ) to close the list of arguments.");
+    return args;
+  }
+  function parsePrimary() {
+    const t = peek();
+    if (t.t === "num") { next(); return { k: "lit", v: t.v, real: t.real, line: t.line }; }
+    if (t.t === "str") { next(); return { k: "lit", v: t.v, str: true, line: t.line }; }
+    if (t.t === "chr") { next(); return { k: "lit", v: t.v, chr: true, line: t.line }; }
+    if (isKw("TRUE") || isKw("FALSE")) { next(); return { k: "lit", v: t.v === "TRUE", line: t.line }; }
+    if ((isKw("MOD") || isKw("DIV") || isKw("EOF")) && isOp("(", 1)) { next(); return { k: "call", name: t.v, args: parseArgs(), line: t.line }; }
+    if (isOp("(")) { next(); const e = parseExpr(); expectOp(")", "A bracket ( is never closed."); return e; }
+    if (t.t === "id") {
+      next();
+      if (isOp("(")) return { k: "call", name: t.v, args: parseArgs(), line: t.line };
+      return { k: "var", name: t.v, line: t.line };
+    }
+    if (t.t === "kw") throw new PseudoError(t.line, `${t.v} can't be used inside an expression here.`, KEYWORDS.has(t.v) && /^END|^NEXT$|^UNTIL$/.test(t.v) ? "Check that the line before is complete." : "");
+    throw new PseudoError(t.line, `Expected a value or variable but found ${describe(t)}.`);
+  }
+  function parsePostfix(e) {
+    for (;;) {
+      if (isOp("[")) {
+        const line = next().line; const idx = [];
+        do { idx.push(parseExpr()); } while (isOp(",") && next());
+        expectOp("]", "Expected ] to close the array index.");
+        e = { k: "index", target: e, idx, line };
+      } else if (isOp(".")) {
+        const line = next().line; e = { k: "field", target: e, name: expectId("a field name"), line };
+      } else return e;
+    }
+  }
+  function parseLvalue(what) {
+    const t = peek();
+    if (t.t !== "id") {
+      if (t.t === "kw") throw new PseudoError(t.line, `${t.v} is a keyword, so it can't be used as ${what || "a variable"}.`);
+      throw new PseudoError(t.line, `Expected ${what || "a variable"} but found ${describe(t)}.`);
+    }
+    next(); return parsePostfix({ k: "var", name: t.v, line: t.line });
+  }
+
+  /* statements */
+  const TERMS = new Set(["ENDIF", "ELSE", "ENDCASE", "OTHERWISE", "NEXT", "ENDWHILE", "UNTIL", "ENDPROCEDURE", "ENDFUNCTION", "ENDTYPE", "THEN"]);
+  function parseBlock(terms, opener) {
+    const body = [];
+    for (;;) {
+      skipNl();
+      const t = peek();
+      if (t.t === "eof") {
+        if (!opener) return body;
+        throw new PseudoError(opener.line, `This ${opener.kw} is never closed: ${terms.join(" or ")} is missing.`);
+      }
+      if (t.t === "kw" && terms.includes(t.v)) return body;
+      if (t.t === "kw" && TERMS.has(t.v)) {
+        throw new PseudoError(t.line, opener ? `Found ${t.v} but the ${opener.kw} on line ${opener.line} needs ${terms.join(" or ")} first.` : `Found ${t.v}, but there is no matching ${{ ENDIF: "IF", ELSE: "IF", ENDCASE: "CASE", OTHERWISE: "CASE", NEXT: "FOR", ENDWHILE: "WHILE", UNTIL: "REPEAT", ENDPROCEDURE: "PROCEDURE", ENDFUNCTION: "FUNCTION", ENDTYPE: "TYPE", THEN: "IF" }[t.v]} for it.`);
+      }
+      body.push(parseStatement(!!opener));
+    }
+  }
+  function parseParams() {
+    const params = [];
+    if (!isOp("(")) return params;
+    next();
+    let mode = "BYVAL";
+    if (!isOp(")")) {
+      do {
+        if (isKw("BYREF") || isKw("BYVAL")) mode = next().v;
+        const name = expectId("a parameter name");
+        let type = null;
+        if (isOp(":")) { next(); type = parseType(); }
+        params.push({ name, type, byref: mode === "BYREF" });
+      } while (isOp(",") && next());
+    }
+    expectOp(")", "Expected ) to close the parameter list.");
+    return params;
+  }
+  function lowerKeywordHint(t) {
+    if (t.t === "id" && KEYWORDS.has(t.v.toUpperCase()) && t.v !== t.v.toUpperCase()) return `Keywords must be in capitals: write ${t.v.toUpperCase()}, not ${t.v}.`;
+    if (t.t === "id" && t.v.toLowerCase() === "print") return "Use OUTPUT to display values in Cambridge pseudocode.";
+    if (t.t === "id" && t.v.toUpperCase() === "ELSEIF") return "There is no ELSEIF. Write ELSE, then a new IF … ENDIF inside it.";
+    if (t.t === "id" && t.v.toUpperCase() === "END") return "Block endings are single words: ENDIF, ENDWHILE, ENDCASE, ENDPROCEDURE, ENDFUNCTION.";
+    return "";
+  }
+  function parseStatement(nested) {
+    const t = peek(), line = t.line;
+    if (t.t === "kw") {
+      switch (t.v) {
+        case "DECLARE": {
+          next(); const names = [expectId("a variable name")];
+          while (isOp(",")) { next(); names.push(expectId("a variable name")); }
+          expectOp(":", "Expected : after the variable name, as in DECLARE Count : INTEGER.");
+          const type = parseType(); endLine();
+          return { k: "declare", names, type, line };
+        }
+        case "CONSTANT": {
+          next(); const name = expectId("a constant name");
+          if (!(isOp("=") || isOp("←"))) throw new PseudoError(line, "Expected = after the constant name, as in CONSTANT Pi = 3.142.");
+          next(); const value = parseExpr(); endLine();
+          return { k: "const", name, value, line };
+        }
+        case "TYPE": {
+          if (nested) throw new PseudoError(line, "TYPE definitions must be at the top level of the program.");
+          next(); const name = expectId("a type name");
+          if (isOp("=")) {
+            next(); expectOp("(", "Expected ( to start the list of values, as in TYPE Season = (Spring, Summer).");
+            const values = []; do { values.push(expectId("a value name")); } while (isOp(",") && next());
+            expectOp(")"); endLine();
+            return { k: "enum", name, values, line };
+          }
+          endLine();
+          const fields = [];
+          for (;;) {
+            skipNl();
+            if (isKw("ENDTYPE")) { next(); endLine(); break; }
+            if (peek().t === "eof") throw new PseudoError(line, `TYPE ${name} is never closed with ENDTYPE.`);
+            expectKw("DECLARE", `Inside a TYPE, each field is written DECLARE Name : Type.`);
+            const fnames = [expectId("a field name")]; while (isOp(",")) { next(); fnames.push(expectId("a field name")); }
+            expectOp(":"); const ft = parseType(); endLine();
+            fnames.forEach(f => fields.push({ name: f, type: ft }));
+          }
+          return { k: "record", name, fields, line };
+        }
+        case "INPUT": { next(); const target = parseLvalue("a variable to store the input"); endLine(); return { k: "input", target, line }; }
+        case "OUTPUT": {
+          next(); const items = [parseExpr()];
+          while (isOp(",")) { next(); items.push(parseExpr()); }
+          endLine(); return { k: "output", items, line };
+        }
+        case "IF": {
+          next(); const cond = parseExpr();
+          if (peek().t === "nl" && !isKw("THEN", 1)) throw new PseudoError(line, "Expected THEN after the IF condition.", "Write IF condition THEN, with THEN at the end of the line or on the next line.");
+          skipNl();
+          expectKw("THEN", "Expected THEN after the IF condition.");
+          const opener = { kw: "IF", line };
+          let then;
+          if (peek().t !== "nl") { then = [parseStatement(true)]; then = then.concat(parseBlock(["ELSE", "ENDIF"], opener)); }
+          else then = parseBlock(["ELSE", "ENDIF"], opener);
+          let els = null;
+          if (isKw("ELSE")) {
+            next();
+            if (peek().t !== "nl") { els = [parseStatement(true)]; els = els.concat(parseBlock(["ENDIF"], opener)); }
+            else els = parseBlock(["ENDIF"], opener);
+          }
+          expectKw("ENDIF"); endLine();
+          return { k: "if", cond, then, els, line };
+        }
+        case "CASE": {
+          next(); expectKw("OF", "Expected OF, as in CASE OF Choice.");
+          const subject = parseExpr(); endLine();
+          const clauses = []; let otherwise = null, cur = null;
+          const opener = { kw: "CASE", line };
+          for (;;) {
+            skipNl();
+            if (isKw("ENDCASE")) { next(); endLine(); break; }
+            if (peek().t === "eof") throw new PseudoError(line, "This CASE is never closed: ENDCASE is missing.");
+            if (isKw("OTHERWISE")) {
+              const ol = next().line; if (isOp(":")) next();
+              cur = { body: [], line: ol }; otherwise = cur;
+              if (peek().t !== "nl") cur.body.push(parseStatement(true));
+              continue;
+            }
+            const save = p;
+            let label = null;
+            const lt = peek();
+            if (lt.t === "num" || lt.t === "str" || lt.t === "chr" || isKw("TRUE") || isKw("FALSE") || isOp("-") || (lt.t === "id" && (isOp(":", 1) || isKw("TO", 1)))) {
+              try {
+                const a = parseConcat(); let b = null;
+                if (isKw("TO")) { next(); b = parseConcat(); }
+                if (isOp(":")) { next(); label = { a, b }; }
+              } catch (e) { label = null; }
+            }
+            if (label) {
+              if (otherwise) throw new PseudoError(lt.line, "OTHERWISE must be the last option in a CASE.");
+              cur = { label, body: [], line: lt.line }; clauses.push(cur);
+              if (peek().t !== "nl") cur.body.push(parseStatement(true));
+              continue;
+            }
+            p = save;
+            if (!cur) throw new PseudoError(peek().line, "Each option in a CASE starts with a value and a colon, such as 1 : OUTPUT \"One\".");
+            const tt = peek();
+            if (tt.t === "kw" && TERMS.has(tt.v)) throw new PseudoError(tt.line, `Found ${tt.v} inside the CASE that starts on line ${opener.line}; ENDCASE is needed first.`);
+            cur.body.push(parseStatement(true));
+          }
+          return { k: "case", subject, clauses, otherwise, line };
+        }
+        case "FOR": {
+          next(); const v = expectId("a loop counter");
+          if (!(isOp("←") || isOp("="))) throw new PseudoError(line, "Expected ← after the loop counter, as in FOR Count ← 1 TO 10.");
+          next(); const from = parseExpr();
+          expectKw("TO", "Expected TO in the FOR loop, as in FOR Count ← 1 TO 10.");
+          const to = parseExpr(); let step = null;
+          if (isKw("STEP")) { next(); step = parseExpr(); }
+          endLine();
+          const body = parseBlock(["NEXT"], { kw: "FOR", line });
+          next();
+          if (peek().t === "id") { const nv = next(); if (nv.v !== v) throw new PseudoError(nv.line, `NEXT ${nv.v} doesn't match the loop counter ${v} of the FOR on line ${line}.`); }
+          endLine();
+          return { k: "for", v, from, to, step, body, line };
+        }
+        case "WHILE": {
+          next(); const cond = parseExpr(); if (isKw("DO")) next(); endLine();
+          const body = parseBlock(["ENDWHILE"], { kw: "WHILE", line }); next(); endLine();
+          return { k: "while", cond, body, line };
+        }
+        case "REPEAT": {
+          next(); endLine();
+          const body = parseBlock(["UNTIL"], { kw: "REPEAT", line }); const ul = next().line;
+          const cond = parseExpr(); endLine();
+          return { k: "repeat", cond, body, line, untilLine: ul };
+        }
+        case "PROCEDURE": case "FUNCTION": {
+          if (nested) throw new PseudoError(line, `A ${t.v} can't be defined inside another block.`, `Move it outside, to the top level of the program.`);
+          next(); const name = expectId(`a ${t.v.toLowerCase()} name`); const params = parseParams();
+          let returns = null;
+          if (t.v === "FUNCTION") { expectKw("RETURNS", "A FUNCTION needs RETURNS and a data type, as in FUNCTION Square(N : INTEGER) RETURNS INTEGER."); returns = parseType(); }
+          endLine();
+          const end = t.v === "FUNCTION" ? "ENDFUNCTION" : "ENDPROCEDURE";
+          const body = parseBlock([end], { kw: t.v, line }); next(); endLine();
+          return { k: t.v === "FUNCTION" ? "func" : "proc", name, params, returns, body, line };
+        }
+        case "CALL": {
+          next(); const name = expectId("a procedure name"); const args = isOp("(") ? parseArgs() : []; endLine();
+          return { k: "call", name, args, line };
+        }
+        case "RETURN": { next(); let value = null; if (peek().t !== "nl" && peek().t !== "eof") value = parseExpr(); endLine(); return { k: "return", value, line }; }
+        case "OPENFILE": {
+          next(); const file = parseExpr(); expectKw("FOR", "Expected FOR and a mode, as in OPENFILE \"Data.txt\" FOR READ.");
+          const m = peek(); if (!(isKw("READ") || isKw("WRITE") || isKw("APPEND") || isKw("RANDOM"))) throw new PseudoError(line, "The file mode must be READ, WRITE or APPEND.");
+          next(); endLine(); return { k: "openfile", file, mode: m.v, line };
+        }
+        case "READFILE": { next(); const file = parseExpr(); expectOp(",", "Expected a comma, as in READFILE \"Data.txt\", Line."); const target = parseLvalue("a variable to read into"); endLine(); return { k: "readfile", file, target, line }; }
+        case "WRITEFILE": { next(); const file = parseExpr(); expectOp(",", "Expected a comma, as in WRITEFILE \"Data.txt\", Line."); const value = parseExpr(); endLine(); return { k: "writefile", file, value, line }; }
+        case "CLOSEFILE": { next(); const file = parseExpr(); endLine(); return { k: "closefile", file, line }; }
+        case "ELSE": case "ENDIF": case "THEN": case "NEXT": case "ENDWHILE": case "UNTIL": case "ENDCASE": case "OTHERWISE": case "ENDPROCEDURE": case "ENDFUNCTION": case "ENDTYPE":
+          throw new PseudoError(line, `Found ${t.v} without a matching opening statement.`);
+        default:
+          throw new PseudoError(line, `A line can't start with ${t.v}.`);
+      }
+    }
+    if (t.t === "id") {
+      const hint = lowerKeywordHint(t);
+      if (hint && !(isOp("←", 1) || isOp("[", 1) || isOp(".", 1))) throw new PseudoError(line, hint);
+      if (BUILTINS.has(t.v) && isOp("(", 1)) throw new PseudoError(line, `${t.v}(…) returns a value, so use it in an expression, such as X ← ${t.v}(…).`);
+      const target = parseLvalue();
+      if (isOp("←")) { next(); const value = parseExpr(); endLine(); return { k: "assign", target, value, line }; }
+      if (isOp("=")) throw new PseudoError(line, "Use ← (or type <-) for assignment. = is only for comparing values.");
+      if (isOp("(")) throw new PseudoError(line, `To run the procedure ${t.v}, write CALL ${t.v}(…).`);
+      throw new PseudoError(line, `Expected ← after ${t.v} to assign it a value.`);
+    }
+    throw new PseudoError(line, `A line can't start with ${describe(t)}.`);
+  }
+
+  const body = parseBlock([], null);
+  const prog = { body, procs: {}, funcs: {}, types: {}, enums: {} };
+  for (const s of body) {
+    if (s.k === "proc" || s.k === "func") {
+      if (prog.procs[s.name] || prog.funcs[s.name]) throw new PseudoError(s.line, `${s.name} is defined more than once.`);
+      if (BUILTINS.has(s.name)) throw new PseudoError(s.line, `${s.name} is the name of a built-in function.`);
+      (s.k === "proc" ? prog.procs : prog.funcs)[s.name] = s;
+    }
+    if (s.k === "record") prog.types[s.name] = s;
+    if (s.k === "enum") prog.enums[s.name] = s;
+  }
+  return prog;
+}
+
+/* ---------------- Runtime helpers ---------------- */
+function typeName(t) {
+  if (!t) return "untyped";
+  if (t.base) return t.base;
+  if (t.array) return `ARRAY OF ${typeName(t.elem)}`;
+  return t.user;
+}
+function kindOf(v) {
+  if (v === UNSET) return "no value";
+  if (typeof v === "number") return Number.isInteger(v) ? "INTEGER" : "REAL";
+  if (typeof v === "string") return v.length === 1 ? "CHAR" : "STRING";
+  if (typeof v === "boolean") return "BOOLEAN";
+  if (v && v.arr) return "ARRAY";
+  if (v && v.rec) return v.type;
+  if (v && v.enumv) return v.type;
+  return "unknown";
+}
+function fmt(v) {
+  if (typeof v === "number") return Number.isInteger(v) ? String(v) : String(+v.toPrecision(12));
+  if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
+  if (typeof v === "string") return v;
+  if (v && v.enumv) return v.name;
+  return String(v);
+}
+function show(v, depth = 0) {
+  if (v === UNSET) return "";
+  if (typeof v === "string") return v.length === 1 ? `'${v}'` : `"${v}"`;
+  if (v && v.arr) {
+    if (v.dims.length === 1) { const items = v.data.slice(0, 12).map(x => show(x, depth + 1) || "·"); return "[" + items.join(", ") + (v.data.length > 12 ? ", …" : "") + "]"; }
+    const rows = []; const [r0, r1] = v.dims[0], [c0, c1] = v.dims[1]; const w = c1 - c0 + 1;
+    for (let r = 0; r <= Math.min(r1 - r0, 5); r++) rows.push("[" + v.data.slice(r * w, r * w + w).map(x => show(x, depth + 1) || "·").join(", ") + "]");
+    return "[" + rows.join(", ") + (r1 - r0 > 5 ? ", …" : "") + "]";
+  }
+  if (v && v.rec) return "{" + Object.keys(v.f).map(k => `${k}: ${show(v.f[k], depth + 1) || "·"}`).join(", ") + "}";
+  return fmt(v);
+}
+function clone(v) {
+  if (v && v.arr) return { arr: true, dims: v.dims, elem: v.elem, data: v.data.map(clone) };
+  if (v && v.rec) { const f = {}; for (const k in v.f) f[k] = clone(v.f[k]); return { rec: true, type: v.type, f }; }
+  return v;
+}
+
+/* ---------------- Machine ---------------- */
+class Machine {
+  constructor(prog, io) {
+    this.prog = prog; this.io = io;
+    this.globals = new Map(); this.frames = []; this.steps = 0; this.maxSteps = io.maxSteps || 2000000;
+    this.stopped = false; this.warned = new Set(); this.open = new Map();
+    this.files = io.files || new Map();
+    this.line = 0; this.callDepth = 0;
+    for (const e of Object.values(prog.enums)) e.values.forEach((n, i) => this.globals.set(n, { kind: "const", type: { user: e.name }, value: { enumv: true, type: e.name, name: n, ord: i } }));
+  }
+  stop() { this.stopped = true; }
+  err(msg, hint, line) { return new PseudoError(line || this.line, msg, hint); }
+  get scope() { return this.frames.length ? this.frames[this.frames.length - 1] : null; }
+  lookup(name) {
+    const s = this.scope;
+    if (s && s.vars.has(name)) return s.vars.get(name);
+    return this.globals.get(name);
+  }
+  warn(key, msg) { if (!this.warned.has(key)) { this.warned.add(key); this.io.onEvent && this.io.onEvent({ type: "warn", line: this.line, msg }); } }
+
+  async tick(line) {
+    this.line = line;
+    if (this.stopped) throw new StopSignal();
+    if (++this.steps > this.maxSteps) throw this.err(`The program was stopped after ${this.maxSteps.toLocaleString()} steps.`, "Check for a loop whose condition never changes.");
+    const r = this.io.tick && this.io.tick(line, this);
+    if (r && r.then) await r;
+    if (this.stopped) throw new StopSignal();
+  }
+
+  defaultValue(type, line) {
+    if (!type) return UNSET;
+    if (type.array) {
+      const dims = []; let size = 1;
+      for (const [lo, hi] of type.boundsV) { dims.push([lo, hi]); size *= (hi - lo + 1); }
+      const data = []; for (let i = 0; i < size; i++) data.push(this.defaultValue(type.elem, line));
+      return { arr: true, dims, elem: type.elem, data };
+    }
+    if (type.user) {
+      const rt = this.prog.types[type.user];
+      if (rt) { const f = {}; for (const fd of rt.fields) f[fd.name] = this.defaultValue(fd.type.array ? fd.type : fd.type, line); return { rec: true, type: type.user, f }; }
+      if (this.prog.enums[type.user]) return UNSET;
+      throw this.err(`There is no data type called ${type.user}.`, "Define it with TYPE … ENDTYPE before using it.", line);
+    }
+    return UNSET;
+  }
+  async resolveType(type) {
+    if (type && type.array && !type.boundsV) {
+      const bv = [];
+      for (const [lo, hi] of type.bounds) {
+        const a = await this.eval(lo), b = await this.eval(hi);
+        if (!Number.isInteger(a) || !Number.isInteger(b)) throw this.err("Array bounds must be whole numbers.");
+        if (b < a) throw this.err(`The upper bound ${b} is less than the lower bound ${a}.`);
+        if ((b - a + 1) > 1e6) throw this.err("That array is too large for the playground.");
+        bv.push([a, b]);
+      }
+      return Object.assign({}, type, { boundsV: bv, elem: type.elem.array ? await this.resolveType(type.elem) : type.elem });
+    }
+    if (type && type.user && this.prog.types[type.user]) {
+      for (const f of this.prog.types[type.user].fields) if (f.type.array && !f.type.boundsV) f.type = await this.resolveType(f.type);
+    }
+    return type;
+  }
+  checkType(type, v, label) {
+    if (!type) return v;
+    const bad = (want) => this.err(`${label} is ${want}, so it can't store ${kindOf(v) === "no value" ? "an empty value" : kindOf(v)} ${typeof v === "object" ? "" : show(v)}`.trim() + ".",
+      typeof v === "string" && /INTEGER|REAL/.test(want) ? `Convert text to a number with STR_TO_NUM(…).` : typeof v === "number" && /STRING|CHAR/.test(want) ? "Convert a number to text with NUM_TO_STR(…)." : (/INTEGER/.test(want) && typeof v === "number") ? "Use INT(…) to keep only the whole-number part, or declare it as REAL." : "");
+    if (type.base) {
+      switch (type.base) {
+        case "INTEGER": if (typeof v !== "number" || !Number.isInteger(v)) throw bad("an INTEGER"); return v;
+        case "REAL": if (typeof v !== "number") throw bad("a REAL"); return v;
+        case "STRING": if (typeof v !== "string") throw bad("a STRING"); return v;
+        case "CHAR": if (typeof v !== "string" || v.length !== 1) throw bad("a CHAR"); return v;
+        case "BOOLEAN": if (typeof v !== "boolean") throw bad("a BOOLEAN"); return v;
+        case "DATE": if (typeof v !== "string") throw bad("a DATE"); return v;
+      }
+    }
+    if (type.array) { if (!(v && v.arr)) throw bad("an ARRAY"); return clone(v); }
+    if (type.user) {
+      if (this.prog.enums[type.user]) { if (!(v && v.enumv && v.type === type.user)) throw bad(`of type ${type.user}`); return v; }
+      if (!(v && v.rec && v.type === type.user)) throw bad(`a ${type.user} record`); return clone(v);
+    }
+    return v;
+  }
+
+  /* references (l-values) */
+  async ref(node, forWrite) {
+    if (node.k === "var") {
+      let slot = this.lookup(node.name);
+      if (slot && slot.kind === "ref") { const r = slot.r; return { label: node.name, type: r.type, slot, get: () => r.get(), set: (v) => r.set(v) }; }
+      if (!slot) {
+        if (this.prog.procs[node.name] || this.prog.funcs[node.name]) throw this.err(`${node.name} is a ${this.prog.procs[node.name] ? "procedure" : "function"}, not a variable.`);
+        if (!forWrite) throw this.err(`${node.name} has not been declared or given a value.`, `Declare it first, such as DECLARE ${node.name} : INTEGER, and assign it a value.`);
+        this.warn("decl:" + node.name, `${node.name} was not declared. Add DECLARE ${node.name} : … to match Cambridge style.`);
+        slot = { kind: "var", type: null, value: UNSET, auto: true };
+        (this.scope ? this.scope.vars : this.globals).set(node.name, slot);
+      }
+      const self = this;
+      return {
+        label: node.name, type: slot.type, slot,
+        get() { if (slot.value === UNSET) throw self.err(`${node.name} has been declared but has not been given a value yet.`); return slot.value; },
+        set(v) {
+          if (slot.kind === "const") throw self.err(`${node.name} is a CONSTANT, so its value can't be changed.`);
+          slot.value = slot.type ? self.checkType(slot.type, v, node.name) : clone(v);
+          if (slot.auto && !slot.type && typeof v !== "object") slot.inferred = kindOf(v);
+        }
+      };
+    }
+    if (node.k === "index") {
+      const base = await this.ref(node.target, false);
+      const arr = base.get();
+      if (!(arr && arr.arr)) throw this.err(`${base.label} is not an array, so it can't be indexed with [ ].`);
+      if (node.idx.length !== arr.dims.length) throw this.err(`${base.label} is a ${arr.dims.length}D array, so it needs ${arr.dims.length} index${arr.dims.length > 1 ? "es" : ""}.`);
+      let off = 0; const shown = [];
+      for (let d = 0; d < arr.dims.length; d++) {
+        const i = await this.eval(node.idx[d]); const [lo, hi] = arr.dims[d];
+        if (!Number.isInteger(i)) throw this.err(`An array index must be a whole number, not ${show(i)}.`);
+        if (i < lo || i > hi) throw this.err(`Index ${i} is outside the bounds of ${base.label}[${arr.dims.map(x => x.join(":")).join(", ")}].`);
+        off = off * (hi - lo + 1) + (i - lo); shown.push(i);
+      }
+      const label = `${base.label}[${shown.join(", ")}]`, self = this;
+      return {
+        label, type: arr.elem,
+        get() { const v = arr.data[off]; if (v === UNSET) throw self.err(`${label} has not been given a value yet.`); return v; },
+        set(v) { arr.data[off] = self.checkType(arr.elem, v, label); }
+      };
+    }
+    if (node.k === "field") {
+      const base = await this.ref(node.target, false);
+      const rec = base.get();
+      if (!(rec && rec.rec)) throw this.err(`${base.label} is not a record, so it has no field ${node.name}.`);
+      if (!(node.name in rec.f)) throw this.err(`The record type ${rec.type} has no field called ${node.name}.`);
+      const fd = this.prog.types[rec.type].fields.find(f => f.name === node.name);
+      const label = `${base.label}.${node.name}`, self = this;
+      return {
+        label, type: fd.type,
+        get() { const v = rec.f[node.name]; if (v === UNSET) throw self.err(`${label} has not been given a value yet.`); return v; },
+        set(v) { rec.f[node.name] = self.checkType(fd.type, v, label); }
+      };
+    }
+    throw this.err("You can only assign to a variable, an array element or a record field.");
+  }
+
+  /* expressions */
+  async eval(n) {
+    switch (n.k) {
+      case "lit": return n.v;
+      case "var": case "index": case "field": return (await this.ref(n, false)).get();
+      case "un": {
+        const v = await this.eval(n.e);
+        if (n.op === "-") { if (typeof v !== "number") throw this.err(`Can't make ${show(v)} negative: it isn't a number.`); return -v; }
+        if (typeof v !== "boolean") throw this.err(`NOT needs a BOOLEAN value, but got ${show(v)}.`);
+        return !v;
+      }
+      case "bin": return this.binop(n);
+      case "call": return this.callFunc(n);
+    }
+    throw this.err("Unknown expression.");
+  }
+  async binop(n) {
+    const op = n.op;
+    if (op === "AND" || op === "OR") {
+      const a = await this.eval(n.l);
+      if (typeof a !== "boolean") throw this.err(`${op} needs BOOLEAN values on both sides, but the left side is ${show(a)}.`);
+      const b = await this.eval(n.r);
+      if (typeof b !== "boolean") throw this.err(`${op} needs BOOLEAN values on both sides, but the right side is ${show(b)}.`);
+      return op === "AND" ? a && b : a || b;
+    }
+    const a = await this.eval(n.l), b = await this.eval(n.r);
+    const num = (x, side) => { if (typeof x !== "number") throw this.err(`${op} needs numbers, but the ${side} side is ${kindOf(x)} ${show(x)}.`, op === "+" && typeof x === "string" ? "To join strings, use & instead of +." : ""); };
+    switch (op) {
+      case "+": num(a, "left"); num(b, "right"); return a + b;
+      case "-": num(a, "left"); num(b, "right"); return a - b;
+      case "*": num(a, "left"); num(b, "right"); return a * b;
+      case "/": num(a, "left"); num(b, "right"); if (b === 0) throw this.err("Division by zero."); return a / b;
+      case "^": num(a, "left"); num(b, "right"); return Math.pow(a, b);
+      case "DIV": case "MOD": {
+        if (!Number.isInteger(a) || !Number.isInteger(b)) throw this.err(`${op} needs two INTEGER values, but got ${show(a)} and ${show(b)}.`);
+        if (b === 0) throw this.err(`${op} by zero.`);
+        return op === "DIV" ? Math.trunc(a / b) : a % b;
+      }
+      case "&":
+        if (typeof a !== "string" || typeof b !== "string") {
+          const bad = typeof a !== "string" ? a : b;
+          throw this.err(`& joins STRING or CHAR values, but one side is ${kindOf(bad)} ${show(bad)}.`, typeof bad === "number" ? "Use NUM_TO_STR(…) to turn a number into text, or separate items with commas in OUTPUT." : "");
+        }
+        return a + b;
+      default: {
+        let x = a, y = b;
+        if (x && x.enumv) x = x.ord; if (y && y.enumv) y = y.ord;
+        const t1 = typeof x, t2 = typeof y;
+        if (t1 !== t2) throw this.err(`Can't compare ${kindOf(a)} ${show(a)} with ${kindOf(b)} ${show(b)}.`, t1 === "string" || t2 === "string" ? "Convert with STR_TO_NUM or NUM_TO_STR so both sides are the same type." : "");
+        if (t1 === "boolean" && !(op === "=" || op === "<>")) throw this.err("BOOLEAN values can only be compared with = or <>.");
+        if (t1 === "object") throw this.err("Whole arrays or records can't be compared.");
+        switch (op) { case "=": return x === y; case "<>": return x !== y; case "<": return x < y; case ">": return x > y; case "<=": return x <= y; case ">=": return x >= y; }
+      }
+    }
+  }
+
+  /* calls */
+  async callFunc(n) {
+    if (BUILTINS.has(n.name)) return this.builtin(n);
+    const f = this.prog.funcs[n.name];
+    if (!f) {
+      if (this.prog.procs[n.name]) throw this.err(`${n.name} is a PROCEDURE, so it doesn't return a value.`, `Use CALL ${n.name}(…) on its own line.`);
+      const slot = this.lookup(n.name);
+      if (slot) throw this.err(`${n.name} is a variable, not a function. Use [ ] for array elements.`);
+      const up = n.name.toUpperCase(); if (BUILTINS.has(up)) throw this.err(`Built-in function names are in capitals: write ${up}.`);
+      throw this.err(`There is no function called ${n.name}.`);
+    }
+    const v = await this.invoke(f, n.args, true);
+    return v;
+  }
+  async invoke(def, args, isFunc) {
+    if (args.length !== def.params.length) throw this.err(`${def.name} needs ${def.params.length} argument${def.params.length === 1 ? "" : "s"} but was given ${args.length}.`);
+    const vars = new Map();
+    for (let i = 0; i < args.length; i++) {
+      const prm = def.params[i]; const type = await this.resolveType(prm.type);
+      if (prm.byref) {
+        const a = args[i];
+        if (!(a.k === "var" || a.k === "index" || a.k === "field")) throw this.err(`The parameter ${prm.name} of ${def.name} is BYREF, so the argument must be a variable.`);
+        const r = await this.ref(a, false);
+        vars.set(prm.name, { kind: "ref", type: type || r.type, r, byref: true });
+      } else {
+        const v = await this.eval(args[i]);
+        vars.set(prm.name, { kind: "var", type, value: type ? this.checkType(type, v, prm.name) : clone(v), param: true });
+      }
+    }
+    if (++this.callDepth > 500) throw this.err("Too many nested calls.", "A recursive subroutine needs a base case that stops it calling itself.");
+    this.frames.push({ name: def.name, vars, isFunc });
+    this.io.onEvent && this.io.onEvent({ type: "call", name: def.name });
+    try {
+      await this.execBlock(def.body);
+      if (isFunc) throw this.err(`The function ${def.name} finished without a RETURN statement.`, "", def.line);
+    } catch (e) {
+      if (e instanceof ReturnSignal) {
+        if (!isFunc) return undefined;
+        const rt = await this.resolveType(def.returns);
+        return this.checkType(rt, e.value, `The return value of ${def.name}`);
+      }
+      throw e;
+    } finally {
+      this.frames.pop(); this.callDepth--;
+      this.io.onEvent && this.io.onEvent({ type: "return", name: def.name });
+    }
+  }
+
+  /* built-ins */
+  async builtin(n) {
+    const name = n.name, args = [];
+    for (const a of n.args) args.push(await this.eval(a));
+    const need = (k) => { if (args.length !== k) throw this.err(`${name} needs ${k} argument${k === 1 ? "" : "s"} but was given ${args.length}.`); };
+    const str = (v, i) => { if (typeof v !== "string") throw this.err(`Argument ${i} of ${name} must be a STRING, but got ${kindOf(v)} ${show(v)}.`, typeof v === "number" ? "Use NUM_TO_STR(…) first." : ""); return v; };
+    const int = (v, i) => { if (typeof v !== "number" || !Number.isInteger(v)) throw this.err(`Argument ${i} of ${name} must be an INTEGER, but got ${show(v)}.`); return v; };
+    const numv = (v, i) => { if (typeof v !== "number") throw this.err(`Argument ${i} of ${name} must be a number, but got ${show(v)}.`, typeof v === "string" ? "Use STR_TO_NUM(…) first." : ""); return v; };
+    switch (name) {
+      case "LENGTH": need(1); return str(args[0], 1).length;
+      case "LEFT": { need(2); const s = str(args[0], 1), k = int(args[1], 2); if (k < 0 || k > s.length) throw this.err(`LEFT asks for ${k} characters but "${s}" has ${s.length}.`); return s.slice(0, k); }
+      case "RIGHT": { need(2); const s = str(args[0], 1), k = int(args[1], 2); if (k < 0 || k > s.length) throw this.err(`RIGHT asks for ${k} characters but "${s}" has ${s.length}.`); return k ? s.slice(-k) : ""; }
+      case "MID": case "SUBSTRING": { need(3); const s = str(args[0], 1), x = int(args[1], 2), k = int(args[2], 3);
+        if (x < 1 || k < 0 || x + k - 1 > s.length) throw this.err(`${name}("${s}", ${x}, ${k}) goes beyond the end of the string (length ${s.length}).`, "Positions start at 1.");
+        return s.substr(x - 1, k); }
+      case "TO_UPPER": case "UCASE": need(1); return str(args[0], 1).toUpperCase();
+      case "TO_LOWER": case "LCASE": need(1); return str(args[0], 1).toLowerCase();
+      case "NUM_TO_STR": need(1); return fmt(numv(args[0], 1));
+      case "STR_TO_NUM": { need(1); const s = str(args[0], 1).trim(); if (s === "" || isNaN(Number(s))) throw this.err(`STR_TO_NUM can't convert "${args[0]}" to a number.`, "Check it first with IS_NUM(…)."); return Number(s); }
+      case "IS_NUM": { need(1); const s = str(args[0], 1).trim(); return s !== "" && !isNaN(Number(s)); }
+      case "ASC": { need(1); const s = str(args[0], 1); if (s.length !== 1) throw this.err(`ASC needs a single CHAR, but got "${s}".`); return s.charCodeAt(0); }
+      case "CHR": { need(1); const k = int(args[0], 1); if (k < 0 || k > 65535) throw this.err(`${k} is not a valid character code.`); return String.fromCharCode(k); }
+      case "INT": need(1); return Math.trunc(numv(args[0], 1));
+      case "RAND": need(1); return Math.random() * numv(args[0], 1);
+      case "ROUND": { need(2); const x = numv(args[0], 1), d = int(args[1], 2); const f = Math.pow(10, d); return Math.round(x * f) / f; }
+      case "MOD": case "DIV": { need(2); const a = args[0], b = args[1];
+        if (!Number.isInteger(a) || !Number.isInteger(b)) throw this.err(`${name} needs two INTEGER values.`);
+        if (b === 0) throw this.err(`${name} by zero.`); return name === "DIV" ? Math.trunc(a / b) : a % b; }
+      case "EOF": { need(1); const f = this.fileOpen(str(args[0], 1), "READ"); return f.pos >= this.files.get(f.name).length; }
+    }
+    throw this.err(`Unknown function ${name}.`);
+  }
+
+  /* files */
+  fileOpen(name, mode) {
+    const f = this.open.get(name);
+    if (!f) throw this.err(`The file "${name}" is not open.`, `Use OPENFILE "${name}" FOR ${mode} first.`);
+    if (mode && f.mode !== mode && !(mode === "WRITE" && f.mode === "APPEND")) throw this.err(`"${name}" is open for ${f.mode}, not ${mode}.`);
+    return f;
+  }
+
+  /* statements */
+  async execBlock(stmts) { for (const s of stmts) await this.exec(s); }
+  async exec(s) {
+    if (s.k === "proc" || s.k === "func" || s.k === "record" || s.k === "enum") return;
+    await this.tick(s.line);
+    switch (s.k) {
+      case "declare": {
+        const type = await this.resolveType(s.type);
+        const target = this.scope ? this.scope.vars : this.globals;
+        for (const name of s.names) {
+          if (this.prog.procs[name] || this.prog.funcs[name]) throw this.err(`${name} is already the name of a subroutine.`);
+          const existing = target.get(name);
+          if (existing && !existing.auto && !(this.scope)) { /* re-declaration inside loops: reset */ }
+          target.set(name, { kind: "var", type, value: this.defaultValue(type, s.line) });
+          this.event({ type: "declare", name, value: target.get(name).value });
+        }
+        return;
+      }
+      case "const": {
+        const v = await this.eval(s.value);
+        const target = this.scope ? this.scope.vars : this.globals;
+        if (target.has(s.name) && target.get(s.name).kind === "const") throw this.err(`The constant ${s.name} is already defined.`);
+        target.set(s.name, { kind: "const", type: null, value: v });
+        this.event({ type: "assign", label: s.name, value: v });
+        return;
+      }
+      case "assign": {
+        const v = await this.eval(s.value);
+        const r = await this.ref(s.target, true);
+        r.set(v);
+        this.event({ type: "assign", label: r.label, value: v });
+        return;
+      }
+      case "output": {
+        let text = "";
+        for (const it of s.items) {
+          const v = await this.eval(it);
+          if (v && (v.arr || v.rec)) throw this.err("A whole array or record can't be output.", "Output its elements or fields one at a time.");
+          text += fmt(v);
+        }
+        this.io.output(text);
+        this.event({ type: "output", value: text });
+        return;
+      }
+      case "input": {
+        const r = await this.ref(s.target, true);
+        const raw = await this.io.input(r.label, r.type ? typeName(r.type) : "");
+        if (this.stopped) throw new StopSignal();
+        let v = raw;
+        const t = r.type && r.type.base;
+        if (t === "INTEGER" || t === "REAL") {
+          const x = Number(String(raw).trim());
+          if (String(raw).trim() === "" || isNaN(x) || (t === "INTEGER" && !Number.isInteger(x))) throw this.err(`"${raw}" is not a valid ${t} for ${r.label}.`);
+          v = x;
+        } else if (t === "BOOLEAN") {
+          const u = String(raw).trim().toUpperCase();
+          if (u !== "TRUE" && u !== "FALSE") throw this.err(`"${raw}" is not a BOOLEAN. Enter TRUE or FALSE.`);
+          v = u === "TRUE";
+        } else if (t === "CHAR") {
+          if (String(raw).length !== 1) throw this.err(`"${raw}" is not a single CHAR for ${r.label}.`);
+        } else if (!r.type) {
+          const x = Number(String(raw).trim());
+          if (String(raw).trim() !== "" && !isNaN(x)) v = x;
+        }
+        r.set(v);
+        this.event({ type: "assign", label: r.label, value: v, input: true });
+        return;
+      }
+      case "if": {
+        const c = await this.eval(s.cond);
+        if (typeof c !== "boolean") throw this.err(`An IF condition must be TRUE or FALSE, but this one gives ${show(c)}.`);
+        if (c) await this.execBlock(s.then); else if (s.els) await this.execBlock(s.els);
+        return;
+      }
+      case "case": {
+        let v = await this.eval(s.subject);
+        for (const cl of s.clauses) {
+          const a = await this.eval(cl.label.a);
+          let hit;
+          if (cl.label.b) {
+            const b = await this.eval(cl.label.b);
+            if (typeof a !== typeof v || typeof b !== typeof v) throw this.err(`The CASE value ${show(v)} can't be compared with the range ${show(a)} TO ${show(b)}.`, "", cl.line);
+            hit = v >= a && v <= b;
+          } else {
+            const va = v && v.enumv ? v.name : v, aa = a && a.enumv ? a.name : a;
+            hit = va === aa;
+          }
+          if (hit) { await this.execBlock(cl.body); return; }
+        }
+        if (s.otherwise) await this.execBlock(s.otherwise.body);
+        return;
+      }
+      case "for": {
+        const from = await this.eval(s.from), to = await this.eval(s.to);
+        const step = s.step ? await this.eval(s.step) : 1;
+        for (const [x, w] of [[from, "start"], [to, "end"], [step, "STEP"]]) if (typeof x !== "number") throw this.err(`The ${w} value of the FOR loop must be a number, but it is ${show(x)}.`);
+        if (step === 0) throw this.err("STEP 0 would loop for ever.");
+        const r = await this.ref({ k: "var", name: s.v, line: s.line }, true);
+        let i = from;
+        while (step > 0 ? i <= to : i >= to) {
+          r.set(i); this.event({ type: "assign", label: s.v, value: i });
+          await this.execBlock(s.body);
+          i += step;
+          if (s.body.length === 0) await this.tick(s.line);
+        }
+        return;
+      }
+      case "while": {
+        for (;;) {
+          const c = await this.eval(s.cond);
+          if (typeof c !== "boolean") throw this.err(`A WHILE condition must be TRUE or FALSE, but this one gives ${show(c)}.`);
+          if (!c) return;
+          await this.execBlock(s.body);
+          await this.tick(s.line);
+        }
+      }
+      case "repeat": {
+        for (;;) {
+          await this.execBlock(s.body);
+          await this.tick(s.untilLine);
+          const c = await this.eval(s.cond);
+          if (typeof c !== "boolean") throw this.err(`An UNTIL condition must be TRUE or FALSE, but this one gives ${show(c)}.`);
+          if (c) return;
+        }
+      }
+      case "call": {
+        const def = this.prog.procs[s.name];
+        if (!def) {
+          if (this.prog.funcs[s.name]) throw this.err(`${s.name} is a FUNCTION. Use it in an expression, such as X ← ${s.name}(…).`);
+          throw this.err(`There is no procedure called ${s.name}.`);
+        }
+        await this.invoke(def, s.args, false);
+        return;
+      }
+      case "return": {
+        const f = this.scope;
+        if (!f) throw this.err("RETURN can only be used inside a FUNCTION or PROCEDURE.");
+        if (f.isFunc && !s.value) throw this.err("A FUNCTION must RETURN a value.");
+        if (!f.isFunc && s.value) throw this.err("A PROCEDURE can't return a value. Use a FUNCTION instead.");
+        throw new ReturnSignal(s.value ? await this.eval(s.value) : undefined);
+      }
+      case "openfile": {
+        const name = await this.eval(s.file);
+        if (typeof name !== "string") throw this.err("The file name must be a STRING.");
+        if (this.open.has(name)) throw this.err(`"${name}" is already open.`, "Close it with CLOSEFILE before opening it again.");
+        if (s.mode === "RANDOM") throw this.err("Random-access files are not supported in the playground.");
+        if (s.mode === "READ" && !this.files.has(name)) throw this.err(`The file "${name}" doesn't exist.`, "Create it in the Files tab, or check the spelling and capitals.");
+        if (s.mode === "WRITE" || !this.files.has(name)) this.files.set(name, []);
+        this.open.set(name, { name, mode: s.mode, pos: 0 });
+        this.event({ type: "file", name });
+        return;
+      }
+      case "readfile": {
+        const name = await this.eval(s.file); const f = this.fileOpen(name, "READ"); const lines = this.files.get(name);
+        if (f.pos >= lines.length) throw this.err(`There are no more lines to read in "${name}".`, `Check EOF("${name}") before reading.`);
+        const v = lines[f.pos++];
+        const r = await this.ref(s.target, true); r.set(v);
+        this.event({ type: "assign", label: r.label, value: v });
+        return;
+      }
+      case "writefile": {
+        const name = await this.eval(s.file); const f = this.fileOpen(name, "WRITE");
+        const v = await this.eval(s.value);
+        if (v && (v.arr || v.rec)) throw this.err("Write fields or elements one at a time.");
+        this.files.get(name).push(fmt(v));
+        this.event({ type: "file", name });
+        return;
+      }
+      case "closefile": {
+        const name = await this.eval(s.file);
+        if (!this.open.has(name)) throw this.err(`"${name}" is not open, so it can't be closed.`);
+        this.open.delete(name); return;
+      }
+    }
+  }
+  event(e) { this.io.onEvent && this.io.onEvent(e); }
+
+  snapshot() {
+    const vis = (map, scope) => {
+      const out = [];
+      for (const [name, s] of map) {
+        if (s.kind === "ref") { let val; try { val = s.r.get(); } catch (e) { val = UNSET; } out.push({ name, scope, type: "BYREF " + (s.type ? typeName(s.type) : ""), value: show(val) }); continue; }
+        if (s.kind === "const" && s.value && s.value.enumv) continue;
+        out.push({ name, scope, type: s.kind === "const" ? "CONSTANT" : (s.type ? typeName(s.type) : (s.inferred || "?") + " (undeclared)"), value: show(s.value) });
+      }
+      return out;
+    };
+    const res = [];
+    if (this.scope) res.push(...vis(this.scope.vars, this.scope.name));
+    res.push(...vis(this.globals, "global"));
+    return res;
+  }
+
+  async run() {
+    for (const r of Object.values(this.prog.types)) for (const f of r.fields) if (f.type.array) f.type = await this.resolveType(f.type);
+    await this.execBlock(this.prog.body);
+    if (this.open.size) this.warn("open", `Some files were not closed: ${[...this.open.keys()].join(", ")}. Use CLOSEFILE.`);
+  }
+}
+
+root.Pseudo = { compile, Machine, PseudoError, StopSignal, fmt, show };
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+<script>
+/* Fixes for Skulpt so its output matches real Python 3. */
+window.patchSkulpt = function (Sk) {
+  if (!Sk || Sk.__patched9618) return;
+  Sk.__patched9618 = true;
+  // Skulpt prints floats with 16 significant digits (73.4 shows as 73.40000000000001).
+  // Python prints the shortest text that reads back as the same number.
+  function pyFloatRepr(x) {
+    if (x === 0) return 1 / x < 0 ? "-0.0" : "0.0";
+    const neg = x < 0, parts = Math.abs(x).toExponential().split("e");
+    const exp = parseInt(parts[1], 10), digits = parts[0].replace(".", "");
+    let s;
+    if (exp < -4 || exp >= 16) s = digits[0] + (digits.length > 1 ? "." + digits.slice(1) : "") + "e" + (exp < 0 ? "-" : "+") + String(Math.abs(exp)).padStart(2, "0");
+    else if (exp < 0) s = "0." + "0".repeat(-exp - 1) + digits;
+    else if (digits.length <= exp + 1) s = digits + "0".repeat(exp + 1 - digits.length) + ".0";
+    else s = digits.slice(0, exp + 1) + "." + digits.slice(exp + 1);
+    return (neg ? "-" : "") + s;
+  }
+  const F = Sk.builtin.float_.prototype, orig = F.str$;
+  F.str$ = function (base, sign) {
+    if (base !== undefined && base !== 10) return orig.call(this, base, sign);
+    const v = this.v;
+    if (isNaN(v)) return "nan";
+    if (sign === undefined) sign = true;
+    if (v === Infinity) return "inf";
+    if (v === -Infinity) return sign ? "-inf" : "inf";
+    return pyFloatRepr(sign ? v : Math.abs(v));
+  };
+  // round(x, n) in Skulpt multiplies by 10**n, so round(2.675, 2) gives 2.68. Python rounds the
+  // exact stored value (2.67499999…), giving 2.67, and sends exact halves to the even digit.
+  const origRound = F.round$;
+  F.round$ = function (ndigits) {
+    if (ndigits === undefined || ndigits === Sk.builtin.none.none$) return origRound.call(this, ndigits);
+    const n = Sk.misceval.asIndexSized(ndigits), x = this.v;
+    if (n < 0 || n > 20 || !isFinite(x) || Math.abs(x) >= 1e21) return origRound.call(this, ndigits);
+    const a = Math.abs(x);
+    let s = a.toFixed(n);
+    const exact = a.toFixed(Math.min(100, n + 60)), dot = exact.indexOf(".");
+    const tail = exact.slice(dot + 1 + n);
+    if (/^50*$/.test(tail)) {
+      const down = exact.slice(0, n > 0 ? dot + 1 + n : dot);
+      if (+down.slice(-1) % 2 === 0) s = down;
+    }
+    const r = parseFloat(s);
+    return new Sk.builtin.float_(x < 0 || (x === 0 && 1 / x < 0) ? -r : r);
+  };
+};
+
+</script>
+<script>
+window.EXAMPLES = {
+ps: [
+{ title: "Welcome: average of marks", code:
+`// Welcome! Press Run to see the output and trace table,
+// or press Step to go through the program one line at a time.
+DECLARE Marks : ARRAY[1:5] OF INTEGER
+DECLARE Index, Total : INTEGER
+DECLARE Average : REAL
+
+Marks[1] ← 72
+Marks[2] ← 58
+Marks[3] ← 91
+Marks[4] ← 66
+Marks[5] ← 80
+
+Total ← 0
+FOR Index ← 1 TO 5
+    Total ← Total + Marks[Index]
+NEXT Index
+
+Average ← Total / 5
+OUTPUT "Total: ", Total
+OUTPUT "Average: ", Average
+` },
+{ title: "INPUT, IF and validation", code:
+`// Type values into the console when the program asks.
+DECLARE Mark : INTEGER
+DECLARE Grade : CHAR
+
+REPEAT
+    OUTPUT "Enter a mark from 0 to 100"
+    INPUT Mark
+    IF Mark < 0 OR Mark > 100 THEN
+        OUTPUT "That mark is out of range. Try again."
+    ENDIF
+UNTIL Mark >= 0 AND Mark <= 100
+
+IF Mark >= 80 THEN
+    Grade ← 'A'
+ELSE
+    IF Mark >= 60 THEN
+        Grade ← 'B'
+    ELSE
+        IF Mark >= 40 THEN
+            Grade ← 'C'
+        ELSE
+            Grade ← 'U'
+        ENDIF
+    ENDIF
+ENDIF
+OUTPUT "Grade: ", Grade
+` },
+{ title: "CASE OF menu", code:
+`DECLARE Choice : INTEGER
+
+FOR Choice ← 1 TO 5
+    CASE OF Choice
+        1 : OUTPUT "1: Add a record"
+        2 : OUTPUT "2: Delete a record"
+        3 TO 4 : OUTPUT Choice, ": Coming soon"
+        OTHERWISE : OUTPUT Choice, ": Invalid choice"
+    ENDCASE
+NEXT Choice
+` },
+{ title: "Linear search", code:
+`DECLARE Names : ARRAY[1:6] OF STRING
+DECLARE Index : INTEGER
+DECLARE Found : BOOLEAN
+DECLARE SearchName : STRING
+
+Names[1] ← "Ali"
+Names[2] ← "Bina"
+Names[3] ← "Omar"
+Names[4] ← "Sara"
+Names[5] ← "Zain"
+Names[6] ← "Hira"
+
+SearchName ← "Sara"
+Found ← FALSE
+Index ← 1
+WHILE Index <= 6 AND Found = FALSE
+    IF Names[Index] = SearchName THEN
+        Found ← TRUE
+    ELSE
+        Index ← Index + 1
+    ENDIF
+ENDWHILE
+
+IF Found = TRUE THEN
+    OUTPUT SearchName, " found at position ", Index
+ELSE
+    OUTPUT SearchName, " not found"
+ENDIF
+` },
+{ title: "Bubble sort", code:
+`DECLARE Numbers : ARRAY[1:6] OF INTEGER
+DECLARE Top, J, Temp : INTEGER
+DECLARE Swapped : BOOLEAN
+
+Numbers[1] ← 5
+Numbers[2] ← 1
+Numbers[3] ← 4
+Numbers[4] ← 2
+Numbers[5] ← 8
+Numbers[6] ← 3
+
+Top ← 5
+REPEAT
+    Swapped ← FALSE
+    FOR J ← 1 TO Top
+        IF Numbers[J] > Numbers[J + 1] THEN
+            Temp ← Numbers[J]
+            Numbers[J] ← Numbers[J + 1]
+            Numbers[J + 1] ← Temp
+            Swapped ← TRUE
+        ENDIF
+    NEXT J
+    Top ← Top - 1
+UNTIL Swapped = FALSE OR Top = 0
+
+FOR J ← 1 TO 6
+    OUTPUT Numbers[J]
+NEXT J
+` },
+{ title: "Binary search (function)", code:
+`DECLARE Data : ARRAY[1:10] OF INTEGER
+DECLARE i : INTEGER
+
+FUNCTION BinarySearch(SearchItem : INTEGER) RETURNS INTEGER
+    DECLARE Low, High, Mid : INTEGER
+    Low ← 1
+    High ← 10
+    WHILE Low <= High
+        Mid ← (Low + High) DIV 2
+        IF Data[Mid] = SearchItem THEN
+            RETURN Mid
+        ELSE
+            IF Data[Mid] < SearchItem THEN
+                Low ← Mid + 1
+            ELSE
+                High ← Mid - 1
+            ENDIF
+        ENDIF
+    ENDWHILE
+    RETURN -1
+ENDFUNCTION
+
+FOR i ← 1 TO 10
+    Data[i] ← i * 5
+NEXT i
+
+OUTPUT "35 is at position ", BinarySearch(35)
+OUTPUT "12 is at position ", BinarySearch(12)
+` },
+{ title: "String functions", code:
+`DECLARE Word, Reversed : STRING
+DECLARE Index, Vowels : INTEGER
+DECLARE Letter : CHAR
+
+Word ← "Racecar"
+Reversed ← ""
+Vowels ← 0
+
+FOR Index ← LENGTH(Word) TO 1 STEP -1
+    Letter ← MID(Word, Index, 1)
+    Reversed ← Reversed & Letter
+    IF TO_LOWER(Letter) = 'a' OR TO_LOWER(Letter) = 'e' OR TO_LOWER(Letter) = 'i' OR TO_LOWER(Letter) = 'o' OR TO_LOWER(Letter) = 'u' THEN
+        Vowels ← Vowels + 1
+    ENDIF
+NEXT Index
+
+OUTPUT "Reversed: ", Reversed
+OUTPUT "Vowels: ", Vowels
+OUTPUT "First three letters: ", LEFT(Word, 3)
+IF TO_UPPER(Word) = TO_UPPER(Reversed) THEN
+    OUTPUT Word, " is a palindrome"
+ENDIF
+` },
+{ title: "Procedures: BYREF and BYVAL", code:
+`PROCEDURE SwapByRef(BYREF X : INTEGER, BYREF Y : INTEGER)
+    DECLARE Temp : INTEGER
+    Temp ← X
+    X ← Y
+    Y ← Temp
+ENDPROCEDURE
+
+PROCEDURE SwapByVal(BYVAL X : INTEGER, BYVAL Y : INTEGER)
+    DECLARE Temp : INTEGER
+    Temp ← X
+    X ← Y
+    Y ← Temp
+ENDPROCEDURE
+
+DECLARE A, B : INTEGER
+A ← 3
+B ← 7
+
+CALL SwapByVal(A, B)
+OUTPUT "After BYVAL swap: A = ", A, ", B = ", B
+CALL SwapByRef(A, B)
+OUTPUT "After BYREF swap: A = ", A, ", B = ", B
+` },
+{ title: "Recursion", code:
+`FUNCTION Factorial(N : INTEGER) RETURNS INTEGER
+    IF N = 0 THEN
+        RETURN 1
+    ELSE
+        RETURN N * Factorial(N - 1)
+    ENDIF
+ENDFUNCTION
+
+FUNCTION DigitSum(N : INTEGER) RETURNS INTEGER
+    IF N = 0 THEN
+        RETURN 0
+    ELSE
+        RETURN (N MOD 10) + DigitSum(N DIV 10)
+    ENDIF
+ENDFUNCTION
+
+OUTPUT "5! = ", Factorial(5)
+OUTPUT "Sum of digits of 472 = ", DigitSum(472)
+` },
+{ title: "Trace table: reverse the digits", code:
+`// Step through this and compare with your own trace table.
+DECLARE N, Result, Digit : INTEGER
+N ← 2547
+Result ← 0
+WHILE N > 0
+    Digit ← N MOD 10
+    Result ← Result * 10 + Digit
+    N ← N DIV 10
+ENDWHILE
+OUTPUT Result
+` },
+{ title: "Records", code:
+`TYPE StudentRecord
+    DECLARE Name : STRING
+    DECLARE Mark : INTEGER
+ENDTYPE
+
+DECLARE Class : ARRAY[1:4] OF StudentRecord
+DECLARE Index, Best : INTEGER
+
+Class[1].Name ← "Hira"
+Class[1].Mark ← 78
+Class[2].Name ← "Bilal"
+Class[2].Mark ← 91
+Class[3].Name ← "Sana"
+Class[3].Mark ← 85
+Class[4].Name ← "Omar"
+Class[4].Mark ← 64
+
+Best ← 1
+FOR Index ← 2 TO 4
+    IF Class[Index].Mark > Class[Best].Mark THEN
+        Best ← Index
+    ENDIF
+NEXT Index
+OUTPUT "Top student: ", Class[Best].Name, " with ", Class[Best].Mark
+` },
+{ title: "Stack using an array", code:
+`DECLARE Stack : ARRAY[1:5] OF INTEGER
+DECLARE TopPointer : INTEGER
+TopPointer ← 0
+
+PROCEDURE Push(NewItem : INTEGER)
+    IF TopPointer = 5 THEN
+        OUTPUT "Stack full"
+    ELSE
+        TopPointer ← TopPointer + 1
+        Stack[TopPointer] ← NewItem
+    ENDIF
+ENDPROCEDURE
+
+FUNCTION Pop() RETURNS INTEGER
+    DECLARE Item : INTEGER
+    IF TopPointer = 0 THEN
+        OUTPUT "Stack empty"
+        RETURN -1
+    ELSE
+        Item ← Stack[TopPointer]
+        TopPointer ← TopPointer - 1
+        RETURN Item
+    ENDIF
+ENDFUNCTION
+
+CALL Push(17)
+CALL Push(42)
+CALL Push(8)
+OUTPUT "Popped ", Pop()
+CALL Push(25)
+OUTPUT "Popped ", Pop()
+OUTPUT "Popped ", Pop()
+OUTPUT "Items left: ", TopPointer
+` },
+{ title: "Text files", code:
+`// Reads Names.txt (see the Files tab) and writes a report file.
+DECLARE Line : STRING
+DECLARE Count, Total : INTEGER
+Count ← 0
+Total ← 0
+
+OPENFILE "Names.txt" FOR READ
+WHILE NOT EOF("Names.txt")
+    READFILE "Names.txt", Line
+    Total ← Total + 1
+    IF TO_UPPER(LEFT(Line, 1)) = "A" THEN
+        Count ← Count + 1
+    ENDIF
+ENDWHILE
+CLOSEFILE "Names.txt"
+
+OPENFILE "Report.txt" FOR WRITE
+WRITEFILE "Report.txt", "Names read: " & NUM_TO_STR(Total)
+WRITEFILE "Report.txt", "Starting with A: " & NUM_TO_STR(Count)
+CLOSEFILE "Report.txt"
+
+OUTPUT Count, " of ", Total, " names start with A."
+OUTPUT "Open the Files tab to see Report.txt."
+` },
+{ title: "2D array: times table", code:
+`DECLARE Table : ARRAY[1:4, 1:4] OF INTEGER
+DECLARE Row, Col : INTEGER
+DECLARE Line : STRING
+
+FOR Row ← 1 TO 4
+    FOR Col ← 1 TO 4
+        Table[Row, Col] ← Row * Col
+    NEXT Col
+NEXT Row
+
+FOR Row ← 1 TO 4
+    Line ← ""
+    FOR Col ← 1 TO 4
+        Line ← Line & NUM_TO_STR(Table[Row, Col]) & " "
+    NEXT Col
+    OUTPUT Line
+NEXT Row
+` },
+{ title: "Spot the errors (try running this)", code:
+`// This program has mistakes students often make.
+// Run it, read the error, fix it, and run again.
+DECLARE Total : INTEGER
+DECLARE Count : INTEGER
+Total = 0
+FOR Count ← 1 TO 5
+    Total ← Total + Count
+NEXT Count
+OUTPUT "The total is " & Total
+` }
+],
+py: [
+{ title: "Welcome: average of marks", code:
+`# Welcome! Press Run, or press Step to go one line at a time.
+marks = [72, 58, 91, 66, 80]
+
+total = 0
+for mark in marks:
+    total = total + mark
+
+average = total / len(marks)
+print("Total:", total)
+print("Average:", average)
+` },
+{ title: "input() and if/elif", code:
+`# Type a value into the console when the program asks.
+mark = int(input("Enter a mark from 0 to 100: "))
+
+if mark >= 80:
+    grade = "A"
+elif mark >= 60:
+    grade = "B"
+elif mark >= 40:
+    grade = "C"
+else:
+    grade = "U"
+
+print(f"A mark of {mark} is grade {grade}")
+` },
+{ title: "Linear search", code:
+`def linear_search(items, target):
+    for index in range(len(items)):
+        if items[index] == target:
+            return index
+    return -1
+
+names = ["Ali", "Bina", "Omar", "Sara", "Zain"]
+print("Sara is at index", linear_search(names, "Sara"))
+print("Hira is at index", linear_search(names, "Hira"))
+` },
+{ title: "Bubble sort", code:
+`def bubble_sort(items):
+    top = len(items) - 1
+    swapped = True
+    while swapped and top > 0:
+        swapped = False
+        for j in range(top):
+            if items[j] > items[j + 1]:
+                items[j], items[j + 1] = items[j + 1], items[j]
+                swapped = True
+        top = top - 1
+
+numbers = [5, 1, 4, 2, 8, 3]
+bubble_sort(numbers)
+print(numbers)
+` },
+{ title: "Insertion sort", code:
+`def insertion_sort(items):
+    for i in range(1, len(items)):
+        key = items[i]
+        j = i - 1
+        while j >= 0 and items[j] > key:
+            items[j + 1] = items[j]
+            j = j - 1
+        items[j + 1] = key
+
+numbers = [12, 5, 33, 7, 21]
+insertion_sort(numbers)
+print(numbers)
+` },
+{ title: "Binary search", code:
+`def binary_search(items, target):
+    low = 0
+    high = len(items) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if items[mid] == target:
+            return mid
+        elif items[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return -1
+
+data = [3, 8, 12, 17, 23, 31, 39, 44, 50, 61]
+print("44 is at index", binary_search(data, 44))
+print("20 is at index", binary_search(data, 20))
+` },
+{ title: "Strings", code:
+`word = "Racecar"
+reversed_word = word[::-1]
+vowels = 0
+for letter in word.lower():
+    if letter in "aeiou":
+        vowels += 1
+
+print("Reversed:", reversed_word)
+print("Vowels:", vowels)
+print("Upper case:", word.upper())
+print("Palindrome?", word.lower() == reversed_word.lower())
+` },
+{ title: "Recursion", code:
+`def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n - 1)
+
+def digit_sum(n):
+    if n == 0:
+        return 0
+    return n % 10 + digit_sum(n // 10)
+
+print("5! =", factorial(5))
+print("Sum of digits of 472 =", digit_sum(472))
+` },
+{ title: "Classes: inheritance and polymorphism", code:
+`class Employee:
+    def __init__(self, name, hourly_rate):
+        self.__name = name
+        self.__hourly_rate = hourly_rate
+
+    def get_name(self):
+        return self.__name
+
+    def calculate_pay(self, hours):
+        return hours * self.__hourly_rate
+
+
+class Manager(Employee):
+    def __init__(self, name, hourly_rate, bonus):
+        super().__init__(name, hourly_rate)
+        self.__bonus = bonus
+
+    def calculate_pay(self, hours):
+        return super().calculate_pay(hours) + self.__bonus
+
+
+staff = [Employee("Bilal", 1500), Manager("Ayesha", 2000, 15000)]
+for person in staff:
+    print(person.get_name(), "earns", person.calculate_pay(40))
+` },
+{ title: "Exception handling", code:
+`def get_quantity():
+    while True:
+        try:
+            quantity = int(input("Number of items: "))
+            if quantity > 0:
+                return quantity
+            print("The number must be positive.")
+        except ValueError:
+            print("That is not a whole number. Try again.")
+
+n = get_quantity()
+print("You ordered", n, "items")
+` },
+{ title: "Stack and queue classes", code:
+`class Stack:
+    def __init__(self):
+        self.items = []
+    def push(self, item):
+        self.items.append(item)
+    def pop(self):
+        if not self.items:
+            return None
+        return self.items.pop()
+
+class Queue:
+    def __init__(self):
+        self.items = []
+    def enqueue(self, item):
+        self.items.append(item)
+    def dequeue(self):
+        if not self.items:
+            return None
+        return self.items.pop(0)
+
+s = Stack()
+q = Queue()
+for x in [17, 42, 8]:
+    s.push(x)
+    q.enqueue(x)
+print("Stack pops", s.pop(), "then", s.pop())
+print("Queue dequeues", q.dequeue(), "then", q.dequeue())
+` },
+{ title: "Dictionary: word count", code:
+`text = "the cat sat on the mat the end"
+counts = {}
+for word in text.split():
+    counts[word] = counts.get(word, 0) + 1
+
+for word in sorted(counts):
+    print(word, counts[word])
+` },
+{ title: "Spot the errors (try running this)", code:
+`# This program has mistakes beginners often make.
+# Run it, read the error, fix it, and run again.
+scores = [72, 58, 91]
+total = 0
+for s in scores:
+    total = total + s
+print("Average: " + total / len(scores))
+` }
+]
+};
+
+</script>
+<script>
+(function () {
+"use strict";
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const root = document.documentElement;
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const yieldUI = () => new Promise(r => setTimeout(r, 0));
+const EX = window.EXAMPLES;
+
+/* ---------------- Theme ---------------- */
+const savedTheme = store.get("play9618-theme", null);
+if (savedTheme) root.setAttribute("data-theme", savedTheme);
+$("#themeBtn").addEventListener("click", () => {
+  const cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next); store.set("play9618-theme", next);
+});
+
+/* ---------------- Editor ---------------- */
+const PS_KW = "DECLARE CONSTANT ARRAY OF INTEGER REAL CHAR STRING BOOLEAN DATE TYPE ENDTYPE IF THEN ELSE ENDIF CASE OTHERWISE ENDCASE FOR TO STEP NEXT WHILE DO ENDWHILE REPEAT UNTIL PROCEDURE ENDPROCEDURE FUNCTION RETURNS RETURN ENDFUNCTION CALL BYREF BYVAL INPUT OUTPUT OPENFILE READFILE WRITEFILE CLOSEFILE READ WRITE APPEND RANDOM AND OR NOT MOD DIV".split(" ");
+const PS_FN = "LENGTH LEFT RIGHT MID SUBSTRING TO_UPPER TO_LOWER UCASE LCASE NUM_TO_STR STR_TO_NUM IS_NUM ASC CHR INT RAND ROUND EOF".split(" ");
+let editor;
+const docs = {};
+if (window.CodeMirror) {
+  CodeMirror.defineMode("cambridge", () => ({
+    startState: () => ({ afterDef: false }),
+    token(stream, state) {
+      if (stream.eatSpace()) return null;
+      if (stream.match("//")) { stream.skipToEnd(); return "comment"; }
+      if (stream.match(/^"[^"]*"?/)) return "string";
+      if (stream.match(/^'[^']*'?/)) return "string-2";
+      if (stream.match(/^\d+(\.\d+)?/)) return "number";
+      if (stream.match("←") || stream.match("<-")) return "operator arrow";
+      const w = stream.match(/^[A-Za-z_][A-Za-z0-9_]*/);
+      if (w) {
+        const word = w[0];
+        if (state.afterDef) { state.afterDef = false; return "def"; }
+        if (word === "PROCEDURE" || word === "FUNCTION" || word === "CALL") { state.afterDef = true; return "keyword"; }
+        if (word === "TRUE" || word === "FALSE") return "atom";
+        if (PS_KW.includes(word)) return "keyword";
+        if (PS_FN.includes(word)) return "builtin";
+        return "variable";
+      }
+      stream.next(); return "operator";
+    }
+  }));
+  const cm = CodeMirror($("#editorWrap"), { lineNumbers: true, indentUnit: 4, tabSize: 4, indentWithTabs: false, smartIndent: true, lineWrapping: false,
+    extraKeys: { Tab: c => c.replaceSelection("    "), "Ctrl-Enter": () => doRun(), "Cmd-Enter": () => doRun(), F8: () => doStep() } });
+  cm.on("inputRead", (c, ch) => {
+    if (lang !== "ps") return;
+    const cur = c.getCursor(); const before = c.getRange({ line: cur.line, ch: Math.max(0, cur.ch - 2) }, cur);
+    if (before === "<-") c.replaceRange("←", { line: cur.line, ch: cur.ch - 2 }, cur);
+  });
+  let marks = [];
+  editor = {
+    cm,
+    get: () => cm.getValue(),
+    set: (v) => cm.setValue(v),
+    swap(l, text) { if (!docs[l]) docs[l] = CodeMirror.Doc(text, l === "ps" ? "cambridge" : "python"); cm.swapDoc(docs[l]); },
+    mark(line, kind) {
+      const h = cm.addLineClass(line - 1, "background", kind === "err" ? "cm-err-line" : "cm-cur-line");
+      cm.addLineClass(line - 1, "gutter", kind === "err" ? "cm-err-gutter" : "cm-cur-gutter");
+      marks.push(line - 1);
+      if (kind !== "err") cm.scrollIntoView({ line: line - 1, ch: 0 }, 60);
+      return h;
+    },
+    clearMarks() { marks.forEach(l => { ["cm-err-line", "cm-cur-line"].forEach(c => cm.removeLineClass(l, "background", c)); ["cm-err-gutter", "cm-cur-gutter"].forEach(c => cm.removeLineClass(l, "gutter", c)); }); marks = []; },
+    readOnly(b) { cm.setOption("readOnly", b); },
+    insert(t) { cm.replaceSelection(t); cm.focus(); },
+    onChange(fn) { cm.on("change", fn); },
+    refresh() { cm.refresh(); }
+  };
+} else {
+  const ta = document.createElement("textarea"); ta.className = "fallback"; ta.spellcheck = false; $("#editorWrap").append(ta);
+  const texts = {};
+  ta.addEventListener("keydown", e => {
+    if (e.key === "Tab") { e.preventDefault(); const s = ta.selectionStart; ta.setRangeText("    ", s, ta.selectionEnd, "end"); }
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); doRun(); }
+    if (e.key === "F8") { e.preventDefault(); doStep(); }
+  });
+  editor = {
+    get: () => ta.value, set: v => { ta.value = v; },
+    swap(l, text) { if (texts[l] === undefined) texts[l] = text; if (editor._l) texts[editor._l] = ta.value; editor._l = l; ta.value = texts[l]; },
+    mark() {}, clearMarks() {}, readOnly(b) { ta.readOnly = b; }, insert(t) { ta.setRangeText(t, ta.selectionStart, ta.selectionEnd, "end"); ta.focus(); },
+    onChange(fn) { ta.addEventListener("input", fn); }, refresh() {}
+  };
+}
+
+/* ---------------- Language and examples ---------------- */
+let lang = store.get("play9618-lang", "ps");
+const lastEx = store.get("play9618-lastex", { ps: 0, py: 0 });
+const exSel = $("#examples");
+function fillExamples() {
+  exSel.innerHTML = `<option value="">Load an example…</option>` + EX[lang].map((e, i) => `<option value="${i}">${esc(e.title)}</option>`).join("");
+  exSel.value = "";
+}
+exSel.addEventListener("change", () => {
+  if (exSel.value === "") return;
+  if (state !== "idle") stopRun();
+  const i = +exSel.value; lastEx[lang] = i; store.set("play9618-lastex", lastEx);
+  editor.set(EX[lang][i].code); exSel.value = ""; editor.clearMarks(); resetPanels();
+  setStatus("ready", "Ready", `Loaded “${EX[lang][i].title}”.`);
+});
+$("#resetBtn").addEventListener("click", () => { if (state !== "idle") stopRun(); editor.set(EX[lang][lastEx[lang] || 0].code); editor.clearMarks(); resetPanels(); setStatus("ready", "Ready", "Example restored."); });
+function setLang(l) {
+  if (state !== "idle") stopRun();
+  lang = l; root.dataset.lang = l; store.set("play9618-lang", l);
+  $$(".switch button").forEach(b => b.setAttribute("aria-selected", b.dataset.lang === l));
+  const saved = store.get("play9618-code-" + l, null);
+  editor.swap(l, saved != null ? saved : EX[l][lastEx[l] || 0].code);
+  editor.clearMarks();
+  $("#fileName").textContent = l === "ps" ? "main.pseudo" : "main.py";
+  $("#arrowBtn").hidden = l !== "ps";
+  $("#filesTab").hidden = l !== "ps";
+  if (l !== "ps" && currentPanel === "files") showPanel("trace");
+  fillExamples(); renderRef(); resetPanels();
+  setStatus("ready", "Ready", l === "ps" ? "Press Run, or Step to go one line at a time." : "Python runs in your browser. Press Run or Step.");
+}
+$$(".switch button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+let saveT;
+editor.onChange(() => { clearTimeout(saveT); saveT = setTimeout(() => store.set("play9618-code-" + lang, editor.get()), 400); if (state === "idle") editor.clearMarks(); });
+$("#arrowBtn").addEventListener("click", () => editor.insert("←"));
+
+/* ---------------- Console ---------------- */
+const con = $("#console");
+let lastSpan = null;
+function conClear() { con.innerHTML = ""; lastSpan = null; }
+function conText(text, cls) {
+  if (!lastSpan || lastSpan.className !== (cls || "o")) { lastSpan = document.createElement("span"); lastSpan.className = cls || "o"; lastSpan.style.display = "inline"; con.append(lastSpan); }
+  lastSpan.textContent += text;
+  con.scrollTop = con.scrollHeight;
+}
+function conBlock(html, cls) {
+  const d = document.createElement("div"); d.className = cls; d.innerHTML = html; con.append(d); lastSpan = null; con.scrollTop = con.scrollHeight;
+  return d;
+}
+$("#clearBtn").addEventListener("click", () => { conClear(); if (state === "idle") con.innerHTML = `<span class="empty">Output appears here.</span>`; });
+
+/* input */
+const inrow = $("#inrow"), inval = $("#inval");
+let pendingInput = null;
+function askInput(label) {
+  inrow.classList.add("on");
+  $("#inlabel").textContent = label;
+  inval.value = ""; setTimeout(() => inval.focus(), 0);
+  setStatus("input", "Waiting for input", "Type a value in the console and press Enter.");
+  setButtons("input");
+  return new Promise((resolve, reject) => { pendingInput = { resolve, reject }; });
+}
+inrow.addEventListener("submit", e => {
+  e.preventDefault();
+  if (!pendingInput) return;
+  const v = inval.value; const p = pendingInput; pendingInput = null;
+  inrow.classList.remove("on");
+  conText(v + "\n", "in");
+  setButtons(stepping ? "paused" : "running");
+  setStatus("run", "Running", "");
+  p.resolve(v);
+});
+
+/* ---------------- Panels ---------------- */
+let currentPanel = "trace";
+function showPanel(p) {
+  currentPanel = p;
+  $$(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.p === p));
+  $$(".panel").forEach(x => x.hidden = x.dataset.p !== p);
+  if (p === "files") renderFiles();
+}
+$$(".tabs button").forEach(b => b.addEventListener("click", () => showPanel(b.dataset.p)));
+
+/* trace table */
+const trace = {
+  cols: [], rows: [], cur: null, lastRow: -1, dirty: false,
+  reset() { this.cols = []; this.rows = []; this.cur = null; this.dirty = true; },
+  add(label, value) {
+    if (this.rows.length >= 3000) return;
+    let ci = this.cols.indexOf(label);
+    if (ci < 0) { ci = this.cols.length; this.cols.push(label); }
+    if (!this.cur || this.cur[label] !== undefined || (label === "OUTPUT" && this.cur.OUTPUT !== undefined)) { this.cur = {}; this.rows.push(this.cur); }
+    this.cur[label] = value; this.lastRow = this.rows.length - 1; this.lastLabel = label; this.dirty = true;
+    scheduleRender();
+  }
+};
+let renderPending = false;
+function scheduleRender() { if (renderPending) return; renderPending = true; requestAnimationFrame(() => { renderPending = false; renderTrace(); }); }
+function renderTrace() {
+  const panel = $("#tracePanel");
+  if (!trace.rows.length) { panel.innerHTML = `<p class="note">The trace table fills in as the program runs: one column per variable, with a new row each time a value changes. Output goes in the last column.</p>`; return; }
+  const cols = trace.cols.filter(c => c !== "OUTPUT"); if (trace.cols.includes("OUTPUT")) cols.push("OUTPUT");
+  const start = Math.max(0, trace.rows.length - 400);
+  let h = `<table class="tt"><thead><tr><th>#</th>${cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>`;
+  if (start > 0) h += `<tr><td colspan="${cols.length + 1}" style="text-align:left">… ${start} earlier rows hidden</td></tr>`;
+  for (let i = start; i < trace.rows.length; i++) {
+    const r = trace.rows[i];
+    h += `<tr><td>${i + 1}</td>${cols.map(c => { const v = r[c]; const isNew = i === trace.lastRow && c === trace.lastLabel; return `<td class="${c === "OUTPUT" ? "out" : ""}${isNew ? " new" : ""}">${v === undefined ? "" : esc(v)}</td>`; }).join("")}</tr>`;
+  }
+  if (trace.rows.length >= 3000) h += `<tr><td colspan="${cols.length + 1}" style="text-align:left">Trace stopped recording after 3000 rows.</td></tr>`;
+  panel.innerHTML = h + `</tbody></table>`;
+  panel.scrollTop = panel.scrollHeight;
+}
+function renderVars(list) {
+  const panel = $("#varsPanel");
+  if (!list || !list.length) { panel.innerHTML = `<p class="note">Variables and their current values appear here while the program runs or is paused.</p>`; return; }
+  panel.innerHTML = `<table class="tt vars"><thead><tr><th>Name</th><th>Type</th><th>Value</th><th>Scope</th></tr></thead><tbody>${list.map(v => `<tr><td>${esc(v.name)}</td><td class="t">${esc(v.type)}</td><td class="v">${v.value === "" ? '<span style="color:var(--muted)">no value</span>' : esc(v.value)}</td><td class="t">${esc(v.scope)}</td></tr>`).join("")}</tbody></table>`;
+}
+function resetPanels() {
+  trace.reset(); renderTrace(); renderVars(null);
+  conClear(); con.innerHTML = `<span class="empty">Output appears here.</span>`;
+}
+
+/* files (pseudocode) */
+const DEFAULT_FILES = { "Names.txt": ["Ali", "Bina", "Ahmed", "Zara", "Omar", "Ayesha"], "Scores.txt": ["Ali,72", "Bina,85", "Omar,64"] };
+const files = new Map(Object.entries(store.get("play9618-files", DEFAULT_FILES)));
+function saveFiles() { store.set("play9618-files", Object.fromEntries(files)); }
+function renderFiles() {
+  const panel = $("#filesPanel");
+  panel.innerHTML = `<div class="files"><p class="note" style="padding:0">Text files your program can use with OPENFILE, READFILE and WRITEFILE. One line in the box is one line of the file. Changes are kept in this browser.</p>
+    ${[...files.keys()].map(n => `<div class="fileitem"><header><span>${esc(n)}</span><span class="sp"></span><span style="font-weight:400;color:var(--muted)">${files.get(n).length} line${files.get(n).length === 1 ? "" : "s"}</span><button class="mini" data-del="${esc(n)}" type="button">Delete</button></header><textarea data-file="${esc(n)}" spellcheck="false" aria-label="Contents of ${esc(n)}">${esc(files.get(n).join("\n"))}</textarea></div>`).join("")}
+    <form class="newfile" id="newFile"><label class="sr-only" for="newName">New file name</label><input id="newName" placeholder="New file name, e.g. Data.txt"><button class="btn" type="submit">Add file</button></form>
+    <button class="mini" type="button" id="resetFiles" style="align-self:flex-start">Restore sample files</button></div>`;
+  $$("textarea[data-file]", panel).forEach(t => t.addEventListener("input", () => { const lines = t.value.split("\n"); if (lines.length && lines[lines.length - 1] === "") lines.pop(); files.set(t.dataset.file, lines); saveFiles(); }));
+  $$("[data-del]", panel).forEach(b => b.addEventListener("click", () => { files.delete(b.dataset.del); saveFiles(); renderFiles(); }));
+  $("#newFile", panel).addEventListener("submit", e => { e.preventDefault(); const n = $("#newName", panel).value.trim(); if (!n) return; if (!files.has(n)) files.set(n, []); saveFiles(); renderFiles(); });
+  $("#resetFiles", panel).addEventListener("click", () => { files.clear(); Object.entries(DEFAULT_FILES).forEach(([k, v]) => files.set(k, v.slice())); saveFiles(); renderFiles(); });
+}
+
+/* reference */
+function renderRef() {
+  const panel = $("#refPanel");
+  if (lang === "ps") panel.innerHTML = `<div class="ref">
+<h3>Variables and constants</h3><pre>DECLARE Count : INTEGER
+DECLARE Name, Town : STRING
+DECLARE Scores : ARRAY[1:10] OF REAL
+DECLARE Grid : ARRAY[1:3, 1:3] OF CHAR
+CONSTANT Pi = 3.142
+Count ← Count + 1        // type &lt;- for ←</pre>
+<p>Types: INTEGER, REAL, CHAR ('A'), STRING ("text"), BOOLEAN (TRUE/FALSE).</p>
+<h3>Input and output</h3><pre>INPUT Name
+OUTPUT "Hello, ", Name</pre>
+<h3>Selection</h3><pre>IF Mark >= 50 THEN
+    OUTPUT "Pass"
+ELSE
+    OUTPUT "Fail"
+ENDIF
+
+CASE OF Choice
+    1 : OUTPUT "One"
+    2 TO 5 : OUTPUT "Two to five"
+    OTHERWISE : OUTPUT "Other"
+ENDCASE</pre>
+<h3>Loops</h3><pre>FOR i ← 1 TO 10 STEP 2
+NEXT i
+WHILE Count &lt; 10
+ENDWHILE
+REPEAT
+UNTIL Answer = "Y"</pre>
+<h3>Subroutines</h3><pre>PROCEDURE Swap(BYREF A : INTEGER, BYREF B : INTEGER)
+ENDPROCEDURE
+CALL Swap(X, Y)
+
+FUNCTION Square(N : INTEGER) RETURNS INTEGER
+    RETURN N * N
+ENDFUNCTION</pre>
+<h3>Records and enumerated types</h3><pre>TYPE Student
+    DECLARE Name : STRING
+    DECLARE Mark : INTEGER
+ENDTYPE
+TYPE Season = (Spring, Summer, Autumn, Winter)</pre>
+<h3>Files</h3><pre>OPENFILE "Data.txt" FOR READ     // or WRITE, APPEND
+READFILE "Data.txt", Line
+WRITEFILE "Data.txt", Line
+EOF("Data.txt")
+CLOSEFILE "Data.txt"</pre>
+<h3>Operators and built-in functions</h3>
+<p><code>+ - * /</code>, <code>DIV</code>, <code>MOD</code>, <code>&amp;</code> (join strings), <code>= &lt;&gt; &lt; &gt; &lt;= &gt;=</code>, <code>AND OR NOT</code></p>
+<p><code>LENGTH(S)</code> <code>LEFT(S, n)</code> <code>RIGHT(S, n)</code> <code>MID(S, start, n)</code> <code>TO_UPPER(S)</code> <code>TO_LOWER(S)</code> <code>UCASE</code> <code>LCASE</code> <code>NUM_TO_STR(x)</code> <code>STR_TO_NUM(S)</code> <code>IS_NUM(S)</code> <code>ASC(c)</code> <code>CHR(n)</code> <code>INT(x)</code> <code>RAND(x)</code> <code>ROUND(x, places)</code></p>
+<h3>Not supported</h3><p>Classes (OOP), random-access files (SEEK, GETRECORD, PUTRECORD), pointer and set types, and the DATE functions. Undeclared variables work, with a warning to add DECLARE.</p>
+</div>`;
+  else panel.innerHTML = `<div class="ref">
+<h3>About this Python</h3><p>Programs run in your browser using <a href="https://skulpt.org" target="_blank" rel="noopener">Skulpt</a>, which supports most of Python 3: variables, lists, dictionaries, strings, f-strings, functions, recursion, classes and inheritance, and try/except. <code>input()</code> reads from the console.</p>
+<p>The modules <code>math</code> and <code>random</code> are available. Reading and writing files, and most other modules, are not.</p>
+<h3>Step and trace</h3><p>Step pauses before each line. The trace table records each variable when its value changes; variables inside a function are marked (local).</p>
+<h3>Paper 4 reminders</h3><pre>def total(items):          # function
+    return sum(items)
+
+class Pet:                 # class
+    def __init__(self, name):
+        self.__name = name   # private attribute
+    def get_name(self):      # getter
+        return self.__name
+
+try:
+    n = int(input("Number: "))
+except ValueError:
+    print("Not a whole number")</pre>
+</div>`;
+}
+
+/* ---------------- Status and buttons ---------------- */
+const statusEl = $("#status"), statusMore = $("#statusMore");
+function setStatus(s, text, more) { statusEl.dataset.s = s; statusEl.textContent = text; if (more !== undefined) statusMore.textContent = more; }
+const runBtn = $("#runBtn"), stepBtn = $("#stepBtn"), stopBtn = $("#stopBtn");
+function setButtons(mode) {
+  runBtn.disabled = mode === "running" || mode === "input";
+  stepBtn.disabled = mode === "input";
+  stopBtn.disabled = mode === "idle";
+  runBtn.childNodes[1].textContent = mode === "paused" ? "Continue " : "Run ";
+  editor.readOnly(mode !== "idle");
+  $("#examples").disabled = false;
+}
+
+/* ---------------- Execution control ---------------- */
+let state = "idle", usedStep = false, stepping = false, stepResolve = null, stopFlag = false, machine = null, runId = 0;
+function waitStep() { return new Promise(r => { stepResolve = r; }); }
+function releaseStep() { const r = stepResolve; stepResolve = null; if (r) r(); }
+function doRun() {
+  if (state === "idle") return start(false);
+  if (state === "paused") { stepping = false; state = "running"; setButtons("running"); setStatus("run", "Running", ""); editor.clearMarks(); releaseStep(); }
+}
+function doStep() {
+  if (state === "idle") return start(true);
+  if (state === "running") { stepping = true; usedStep = true; return; }
+  if (state === "paused") releaseStep();
+}
+function stopRun() {
+  stopFlag = true;
+  if (machine) machine.stop();
+  releaseStep();
+  if (pendingInput) { const p = pendingInput; pendingInput = null; inrow.classList.remove("on"); p.reject(new Error("__stopped__")); }
+}
+runBtn.addEventListener("click", doRun);
+stepBtn.addEventListener("click", doStep);
+stopBtn.addEventListener("click", stopRun);
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !(window.CodeMirror && e.target.closest(".CodeMirror"))) { e.preventDefault(); doRun(); }
+  if (e.key === "F8" && !(window.CodeMirror && e.target.closest(".CodeMirror"))) { e.preventDefault(); doStep(); }
+  if (e.key === "Escape" && state !== "idle") stopRun();
+});
+
+async function tickCommon(line, snapshotFn) {
+  if (stepping) {
+    state = "paused"; setButtons("paused");
+    editor.clearMarks(); editor.mark(line, "cur");
+    renderVars(snapshotFn());
+    setStatus("pause", `Paused at line ${line}`, "This line runs next. Press Step for one line, or Continue to run the rest.");
+    await waitStep();
+    if (!stopFlag) { state = "running"; if (!stepping) editor.clearMarks(); setButtons(stepping ? "paused" : "running"); }
+    return;
+  }
+  const delay = +$("#speed").value;
+  if (delay > 0) {
+    editor.clearMarks(); editor.mark(line, "cur"); renderVars(snapshotFn());
+    setStatus("run", "Running", `Line ${line}`);
+    await sleep(delay);
+  }
+}
+
+async function start(stepMode) {
+  const id = ++runId;
+  stopFlag = false; stepping = stepMode; usedStep = stepMode || +$("#speed").value > 0; state = "running";
+  editor.clearMarks(); trace.reset(); renderTrace(); renderVars(null); conClear();
+  setButtons("running"); setStatus("run", "Running", "");
+  const t0 = performance.now();
+  try {
+    if (lang === "ps") await runPseudo(); else await runPython();
+    if (id !== runId) return;
+    editor.clearMarks();
+    const secs = ((performance.now() - t0) / 1000).toFixed(2);
+    setStatus("done", "Finished", usedStep ? `${steps.toLocaleString()} step${steps === 1 ? "" : "s"}.` : `${steps.toLocaleString()} step${steps === 1 ? "" : "s"} in ${secs} s.`);
+    if (!con.textContent.trim()) conBlock("The program finished without any output.", "sys");
+  } catch (e) {
+    if (id !== runId) return;
+    editor.clearMarks();
+    if (e && (e.__stopped || e.message === "__stopped__" || e instanceof Pseudo.StopSignal)) {
+      conBlock("Program stopped.", "sys"); setStatus("ready", "Stopped", `Stopped after ${steps.toLocaleString()} steps.`);
+    } else {
+      const info = describeError(e);
+      conBlock(`<b>${info.line ? `Error on line ${info.line}` : "Error"}</b>${esc(info.msg)}${info.hint ? `<span class="hint">${esc(info.hint)}</span>` : ""}`, "error");
+      if (info.line) editor.mark(info.line, "err");
+      setStatus("err", info.line ? `Error on line ${info.line}` : "Error", "Fix the highlighted line and run again.");
+    }
+  } finally {
+    if (id === runId) {
+      state = "idle"; stepping = false; machine = null; inrow.classList.remove("on"); pendingInput = null;
+      setButtons("idle"); renderTrace();
+      if (lang === "ps") { saveFiles(); if (currentPanel === "files") renderFiles(); }
+    }
+  }
+}
+let steps = 0;
+
+/* ---------------- Pseudocode ---------------- */
+async function runPseudo() {
+  steps = 0;
+  const prog = Pseudo.compile(editor.get());
+  machine = new Pseudo.Machine(prog, {
+    files,
+    output(text) { conText(text + "\n"); },
+    async input(label, type) {
+      try { return await askInput(`INPUT ${label}${type ? " (" + type + ")" : ""}`); }
+      catch (e) { const s = new Error("__stopped__"); s.__stopped = true; throw s; }
+    },
+    tick(line, m) {
+      steps = m.steps;
+      if (stopFlag) return;
+      if (stepping || +$("#speed").value > 0) return tickCommon(line, () => m.snapshot());
+      if (m.steps % 400 === 0) return yieldUI();
+    },
+    onEvent(e) {
+      if (e.type === "assign") trace.add(e.label, Pseudo.show(e.value) || "");
+      else if (e.type === "output") trace.add("OUTPUT", e.value);
+      else if (e.type === "warn") conBlock(`Line ${e.line}: ${esc(e.msg)}`, "warn");
+    }
+  });
+  const m = machine;
+  await m.run();
+  renderVars(m.snapshot());
+}
+
+/* ---------------- Python (Skulpt) ---------------- */
+let pyLoading = null;
+function loadPython() {
+  if (window.Sk && Sk.builtinFiles) return Promise.resolve();
+  if (pyLoading) return pyLoading;
+  try { if (new Function("return 2")() !== 2) throw 0; }
+  catch (x) { const e = new Error("Python can't run on this copy of the page, because the site hosting it blocks the code compiler Python needs. Download the HTML file and open it in your browser, or host it on GitHub Pages, and Python will work. Pseudocode works here as normal."); e.__load = true; return Promise.reject(e); }
+  const note = conBlock("Loading Python for the first time (about 1 MB)…", "sys");
+  const load = src => new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => rej(new Error("load")); document.head.append(s); });
+  pyLoading = load("https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js")
+    .then(() => load("https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"))
+    .then(() => { window.patchSkulpt(window.Sk); note.remove(); })
+    .catch(() => { pyLoading = null; const e = new Error("Python couldn't be loaded. Check your internet connection, then try again."); e.__load = true; throw e; });
+  return pyLoading;
+}
+function pyRepr(v) {
+  try { let s = Sk.misceval.objectRepr(v); if (typeof s !== "string") s = s.v; return s.length > 140 ? s.slice(0, 137) + "…" : s; } catch (e) { return "?"; }
+}
+function pyType(v) { return (v && v.tp$name) || ""; }
+const PY_SKIP = new Set(["function", "module", "type", "builtin_function_or_method", "method"]);
+function pyFrames(susp) { const fr = []; let f = susp; while (f) { if (f.$lineno !== undefined && f.$lineno !== null) fr.push(f); f = f.child; } return fr; }
+function pySnapshot(fr) {
+  const list = []; if (!fr.length) return list;
+  const top = fr[fr.length - 1];
+  if (fr.length > 1 && top.$tmps) for (const k of Object.keys(top.$tmps)) { if (k[0] === "$") continue; const v = top.$tmps[k]; if (!v || !v.tp$name || PY_SKIP.has(v.tp$name)) continue; list.push({ name: k, scope: "local", type: pyType(v), value: pyRepr(v) }); }
+  const g = top.$gbl || fr[0].$gbl;
+  if (g) for (const k of Object.keys(g)) { if (k.startsWith("__")) continue; const v = g[k]; if (!v || !v.tp$name || PY_SKIP.has(v.tp$name)) continue; list.push({ name: k, scope: "global", type: pyType(v), value: pyRepr(v) }); }
+  return list;
+}
+async function runPython() {
+  steps = 0;
+  await loadPython();
+  const code = editor.get();
+  let prev = new Map(), lineBuf = "", lastSnap = [];
+  Sk.configure({
+    output: t => { conText(t); lineBuf += t; let i; while ((i = lineBuf.indexOf("\n")) >= 0) { trace.add("OUTPUT", lineBuf.slice(0, i)); lineBuf = lineBuf.slice(i + 1); } },
+    read: x => { if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[x] === undefined) throw "File not found: '" + x + "'"; return Sk.builtinFiles.files[x]; },
+    __future__: Sk.python3,
+    inputfunTakesPrompt: true,
+    inputfun: (prompt) => {
+      if (prompt) conText(String(prompt));
+      return askInput("input()").catch(() => { const s = new Error("__stopped__"); s.__stopped = true; throw s; });
+    },
+    debugging: true,
+    breakpoints: () => true,
+    execLimit: null
+  });
+  Sk.execLimit = null;
+  const handler = function (susp) {
+    if (stopFlag) { const s = new Error("__stopped__"); s.__stopped = true; return Promise.reject(s); }
+    steps++;
+    if (steps > 3000000) return Promise.reject(Object.assign(new Error("The program was stopped after 3,000,000 steps. Check for a loop that never ends."), { __limit: true }));
+    const fr = pyFrames(susp);
+    const line = fr.length ? fr[fr.length - 1].$lineno : 0;
+    const snap = pySnapshot(fr);
+    if (fr.length <= 1) lastSnap = snap;
+    const now = new Map();
+    for (const v of snap) {
+      const key = (v.scope === "local" ? "L:" : "G:") + v.name;
+      now.set(key, v.value);
+      if (prev.get(key) !== v.value) trace.add(v.scope === "local" ? `${v.name} (local)` : v.name, v.value);
+    }
+    prev = now;
+    const resume = () => susp.resume();
+    if (stepping || +$("#speed").value > 0) return tickCommon(line, () => snap).then(() => { if (stopFlag) { const s = new Error("__stopped__"); s.__stopped = true; throw s; } return resume(); });
+    if (steps % 300 === 0) return yieldUI().then(resume);
+    return Promise.resolve().then(resume);
+  };
+  const mod = await Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, code, true), { "Sk.debug": handler });
+  if (lineBuf) trace.add("OUTPUT", lineBuf);
+  let fin = lastSnap.filter(v => v.scope === "global");
+  try { if (mod && mod.$d) fin = pySnapshot([{ $lineno: 0, $gbl: mod.$d }]); } catch (x) {}
+  // record values set by the very last line in the trace table
+  for (const v of fin) if (prev.get("G:" + v.name) !== v.value) trace.add(v.name, v.value);
+  renderVars(fin);
+}
+
+/* ---------------- Errors ---------------- */
+const PY_HINTS = {
+  NameError: "Check the spelling and capital letters, and make sure the variable is given a value before this line.",
+  SyntaxError: "Check for a missing colon at the end of an if, for, while, def or class line, and that every bracket and quote is closed.",
+  IndentationError: "Lines inside a block must all be indented by the same amount, usually 4 spaces.",
+  TypeError: "You may be mixing types, such as joining a number to a string. Convert with str(…), int(…) or float(…).",
+  ValueError: "A value couldn't be converted, for example int() of text that isn't a whole number.",
+  IndexError: "A list index is outside the list. Indexes start at 0 and go up to len(list) − 1.",
+  KeyError: "That key isn't in the dictionary. Use .get(key) or check with 'in' first.",
+  ZeroDivisionError: "Check the value you're dividing by isn't 0.",
+  AttributeError: "That object doesn't have this attribute or method. Check the spelling, and that it was set in __init__.",
+  RecursionError: "A recursive function needs a base case that stops it calling itself."
+};
+function pySyntaxHelp(lines, ln) {
+  const text = (lines[ln - 1] || "").replace(/#.*$/, "");
+  const code = text.trim();
+  let prev = ln - 2; while (prev >= 0 && !lines[prev].replace(/#.*$/, "").trim()) prev--;
+  const ptext = prev >= 0 ? lines[prev].replace(/#.*$/, "") : "";
+  const ind = s => s.match(/^\s*/)[0].length;
+  const block = /^(if|elif|else|for|while|def|class|try|except|finally|with)\b/;
+  if (prev >= 0 && /:\s*$/.test(ptext) && block.test(ptext.trim()) && ind(text) <= ind(ptext))
+    return { line: ln, msg: `IndentationError: expected an indented block after line ${prev + 1}`, hint: "Indent the lines inside the block, usually by 4 spaces." };
+  if (block.test(code) && !/:\s*$/.test(code))
+    return { line: ln, msg: "SyntaxError: expected ':'", hint: `Add a colon at the end of line ${ln}: lines starting with if, elif, else, for, while, def and class end with :.` };
+  let depth = 0, quote = null;
+  for (const ch of code) { if (quote) { if (ch === quote) quote = null; continue; } if (ch === '"' || ch === "'") quote = ch; else if ("([{".includes(ch)) depth++; else if (")]}".includes(ch)) depth--; }
+  if (quote) return { line: ln, msg: "SyntaxError: unterminated string literal", hint: "A string is missing its closing quote mark." };
+  if (depth > 0) return { line: ln, msg: "SyntaxError: '(' was never closed", hint: "A bracket on this line is opened but not closed." };
+  if (depth < 0) return { line: ln, msg: "SyntaxError: unmatched ')'", hint: "There is a closing bracket with no matching opening bracket." };
+  if (prev >= 0) {
+    let d = 0; for (const ch of ptext) { if ("([{".includes(ch)) d++; else if (")]}".includes(ch)) d--; }
+    if (d > 0) return { line: prev + 1, msg: "SyntaxError: '(' was never closed", hint: "A bracket on this line is opened but not closed." };
+  }
+  if (/^(print|input)\s+[^(=]/.test(code)) return { line: ln, msg: "SyntaxError: missing parentheses in call to '" + code.split(/\s/)[0] + "'", hint: "In Python 3, print and input are functions: write print(...)." };
+  if (/[^=!<>]=[^=]/.test(code) && /^(if|elif|while)\b/.test(code)) return { line: ln, msg: "SyntaxError: invalid syntax. Maybe you meant '==' instead of '='?", hint: "Use == to compare two values; = stores a value in a variable." };
+  return { line: ln, msg: "SyntaxError: invalid syntax", hint: "" };
+}
+function describeError(e) {
+  if (e instanceof Pseudo.PseudoError) return { line: e.line, msg: e.message, hint: e.hint };
+  if (e && e.__load) return { line: 0, msg: e.message, hint: "" };
+  if (e && e.__limit) return { line: 0, msg: e.message, hint: "" };
+  if (window.Sk && e && e.tp$name) {
+    let line = 0; try { if (e.traceback && e.traceback.length) line = e.traceback[0].lineno; } catch (x) {}
+    let msg = String(e.toString()).replace(/ on line \d+$/, "");
+    let name = e.tp$name;
+    if (/bad input|EOF in multi-line|bad token/.test(msg)) name = "SyntaxError";
+    if (/bad indentation|unindent|expected an indented block|IndentationError/i.test(msg)) name = "IndentationError";
+    if (/maximum recursion depth|call stack size/i.test(msg)) { name = "RecursionError"; msg = "RecursionError: maximum recursion depth exceeded"; }
+    if (name === "SyntaxError" && /bad input|bad token/.test(msg) && line) {
+      const better = pySyntaxHelp(editor.get().split("\n"), line);
+      if (better) { msg = better.msg; if (better.line) line = better.line; if (better.hint) return { line, msg, hint: better.hint }; if (/^IndentationError/.test(msg)) name = "IndentationError"; }
+    }
+    if (name === "IndentationError") msg = msg.replace(/^SyntaxError:/, "IndentationError:");
+    msg = msg.replace("integer division or modulo by zero", "division by zero");
+    msg = msg.replace(/cannot concatenate 'str' and '(\w+)' objects/, 'can only concatenate str (not "$1") to str');
+    return { line, msg, hint: PY_HINTS[name] || "" };
+  }
+  return { line: 0, msg: String(e && e.message || e), hint: "" };
+}
+
+/* ---------------- Boot ---------------- */
+showPanel("trace");
+setLang(lang);
+setButtons("idle");
+if (window.CodeMirror) setTimeout(() => editor.refresh(), 50);
+})();
+
+</script>
+</html>
