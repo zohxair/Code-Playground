@@ -103,14 +103,6 @@ Skulpt formats decimal numbers slightly differently from standard Python (for ex
 
 Download `code-playground-9618.html` and double-click it. It opens in any modern browser (Chrome, Edge, Firefox or Safari).
 
-### Host it on GitHub Pages
-
-1. Create a new repository, for example `9618-code-playground`.
-2. Upload `code-playground-9618.html` renamed to `index.html`, together with this `README.md`.
-3. In the repository, go to **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**, select the `main` branch and the `/ (root)` folder, then **Save**.
-5. After a minute or two, the site is live at `https://zohxair.github.io/9618-code-playground/` (or at your own repository name).
-
 ## How it works
 
 - **Pseudocode** runs on an interpreter written for this project. It reads the program, checks its structure (for example, that every `IF` has an `ENDIF`), and runs it line by line, so it can pause at any line and record every change to a variable.
